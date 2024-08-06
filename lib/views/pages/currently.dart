@@ -1,27 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tv_program/models/xml_tv.dart';
+import 'package:tv_program/providers/program_provider.dart';
+import 'package:tv_program/providers/selected_program.dart';
 import 'package:tv_program/services/service.dart';
 
-class CurrentlyPage extends StatefulWidget {
-  const CurrentlyPage({super.key, required this.service});
-
-  final TvService service;
+class CurrentlyPage extends ConsumerWidget {
+  const CurrentlyPage({super.key});
 
   @override
-  State<CurrentlyPage> createState() => _CurrentlyPageState();
-}
-
-class _CurrentlyPageState extends State<CurrentlyPage> {
-  String selectedProgram = TvService.tvTnt;
-
-  void selectProgram(String program) {
-    setState(() {
-      selectedProgram = program;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedProgram = ref.watch(selectedProgramProvider);
+    final program = ref.watch(programProvider);
     return Scaffold(
       appBar: AppBar(
         title: Builder(
@@ -38,22 +28,21 @@ class _CurrentlyPageState extends State<CurrentlyPage> {
           },
         ),
       ),
-      body: FutureBuilder(
-        future: widget.service.getProgram(selectedProgram),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
-          }
-          final tvProgram = snapshot.data!;
-          return ChannelList(tvProgram: tvProgram);
-        },
+      body: program.when(
+        data: (tvProgram) => ChannelList(tvProgram: tvProgram),
+        loading: () => const Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 8),
+              Text('Chargement, veuillez patienter...'),
+            ],
+          ),
+        ),
+        error: (error, stackTrace) => Center(
+          child: Text('Error: $error'),
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
@@ -84,13 +73,19 @@ class _CurrentlyPageState extends State<CurrentlyPage> {
         onTap: (index) {
           switch (index) {
             case 0:
-              selectProgram(TvService.tvTnt);
+              ref
+                  .read(selectedProgramProvider.notifier)
+                  .select(TvService.tvTnt);
               break;
             case 1:
-              selectProgram(TvService.tvFrance);
+              ref
+                  .read(selectedProgramProvider.notifier)
+                  .select(TvService.tvFrance);
               break;
             case 2:
-              selectProgram(TvService.allChannels);
+              ref
+                  .read(selectedProgramProvider.notifier)
+                  .select(TvService.allChannels);
               break;
           }
         },

@@ -26,9 +26,14 @@ class XmlTvParser {
     }).toList();
 
     debugPrint('Parsing programs...');
-    final programs = document.findAllElements('programme').map((element) {
-      return parseProgram(element);
-    }).toList();
+    final programs = document
+        .findAllElements('programme')
+        .map((element) {
+          return parseProgram(element);
+        })
+        .where((element) => element != null)
+        .map((e) => e!)
+        .toList();
 
     return XmlTv(channels: channels, programs: programs);
   }
@@ -49,7 +54,7 @@ class XmlTvParser {
     return Channel(id: id, name: displayName, icon: unescape(icon));
   }
 
-  Program parseProgram(XmlElement element) {
+  Program? parseProgram(XmlElement element) {
     debugPrint('Parsing program...');
 
     final start = element.getAttribute('start');
@@ -66,10 +71,23 @@ class XmlTvParser {
     final episodeNum =
         element.findElements('episode-num').firstOrNull?.innerText;
     final rating = parseRating(element.findElements('rating').firstOrNull);
+
+    final startTime =
+        start != null ? format.parse(reworkDateString(start)) : null;
+    final stopTime = stop != null ? format.parse(reworkDateString(stop)) : null;
+    final now = DateTime.now();
+    if (startTime != null &&
+            startTime.isBefore(now) &&
+            stopTime != null &&
+            stopTime.isBefore(now) ||
+        startTime?.day != now.day) {
+      return null;
+    }
+
     return Program(
       channelId: channelId,
-      start: start != null ? format.parse(reworkDateString(start)) : null,
-      stop: stop != null ? format.parse(reworkDateString(stop)) : null,
+      start: startTime,
+      stop: stopTime,
       title: title,
       description: description,
       categories: categories,

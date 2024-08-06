@@ -1,10 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
+
 import 'dart:typed_data';
 import 'package:archive/archive_io.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
+
+import 'package:tv_program/database/database.dart';
 import 'package:tv_program/models/xml_tv.dart';
 import 'package:tv_program/services/xml_tv_parser.dart';
 
@@ -26,9 +27,10 @@ class TvService {
   final String xzFormat = 'xz';
   final String zipFormat = 'zip';
 
-  const TvService(this.parser);
+  const TvService(this.parser, this.database);
 
   final XmlTvParser parser;
+  final AppDatabase database;
 
   Future<Uint8List> downloadProgram(String path) async {
     final url = '$baseUrl/$path.$zipFormat';
@@ -41,41 +43,13 @@ class TvService {
     return response.bodyBytes;
   }
 
-  Future<String?> getFromCache(String selectedProgram) async {
-    final tempDir = await getTemporaryDirectory();
-    final cacheFilePath = '${tempDir.path}/$selectedProgram$cacheFileName';
-
-    final file = File(cacheFilePath);
-    if (await file.exists()) {
-      final outdated =
-          DateTime.now().difference(await file.lastModified()).inHours > 12;
-      return outdated ? null : file.readAsString();
-    }
-    return null;
-  }
-
-  Future<void> putInCache(String xml, String selectedProgram) async {
-    final tempDir = await getTemporaryDirectory();
-    final cacheFilePath = '${tempDir.path}/$selectedProgram$cacheFileName';
-
-    // Try to find existing cache file
-    final file = File(cacheFilePath);
-    if (await file.exists()) {
-      debugPrint('Deleting existing cache file');
-      await file.delete();
-    }
-    // Save to cache
-    debugPrint('Saving to cache');
-    await file.writeAsString(xml);
-  }
-
   Future<XmlTv> getProgram(String selectedProgram) async {
     debugPrint('Getting France TV program');
 
     // Try to get the XML from the cache
-    var xml = await getFromCache(selectedProgram);
+    final containsTodayData = await database.containsTodayData(selectedProgram);
 
-    if (xml == null) {
+    if (!containsTodayData) {
       // Read the XZ file into a Uint8List
       final xzBytes = await downloadProgram(selectedProgram);
 
@@ -83,13 +57,15 @@ class TvService {
       final archive = decompress(xzBytes);
 
       // Extract the contents of the archive
-      xml = extractArchive(archive);
+      final xml = extractArchive(archive);
 
-      // Save the XML to the cache
-      await putInCache(xml, selectedProgram);
+      final parsedData = parser.parse(xml);
+
+      // Save the data to the database
+      await database.saveTodayData(selectedProgram, parsedData);
     }
 
-    return parser.parse(xml);
+    return database.getTodayData(selectedProgram);
   }
 
   Archive decompress(Uint8List input) {

@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tv_program/services/service.dart';
 import 'package:tv_program/views/pages/channel.dart';
 import 'package:tv_program/views/pages/currently.dart';
 import 'package:tv_program/models/xml_tv.dart';
 import 'package:tv_program/views/pages/program.dart';
 
 class TvProgram extends StatelessWidget {
-  const TvProgram({super.key, required this.service});
-
-  final TvService service;
+  const TvProgram({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +13,7 @@ class TvProgram extends StatelessWidget {
       title: 'TV Program',
       initialRoute: '/',
       routes: {
-        '/': (context) => CurrentlyPage(service: service),
+        '/': (context) => const CurrentlyPage(),
         '/channel': (context) {
           final (Channel, List<Program>) args = ModalRoute.of(context)!
               .settings
