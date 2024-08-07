@@ -30,7 +30,7 @@ class $ChannelTableTable extends ChannelTable
   late final GeneratedColumn<String> icon = GeneratedColumn<String>(
       'icon', aliasedName, false,
       additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 0, maxTextLength: 255),
+          GeneratedColumn.checkTextLength(minTextLength: 0, maxTextLength: 512),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
   static const VerificationMeta _selectedProgramMeta =
@@ -325,7 +325,7 @@ class $ProgramTableTable extends ProgramTable
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
       'title', aliasedName, false,
       additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 0, maxTextLength: 128),
+          GeneratedColumn.checkTextLength(minTextLength: 0, maxTextLength: 512),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
   static const VerificationMeta _descriptionMeta =
@@ -351,7 +351,7 @@ class $ProgramTableTable extends ProgramTable
   late final GeneratedColumn<String> icon = GeneratedColumn<String>(
       'icon', aliasedName, false,
       additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 0, maxTextLength: 255),
+          GeneratedColumn.checkTextLength(minTextLength: 0, maxTextLength: 512),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
   static const VerificationMeta _ratingSystemMeta =

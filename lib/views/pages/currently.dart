@@ -169,7 +169,7 @@ class _ChannelListState extends State<ChannelList> {
           child: Column(
             children: [
               ListTile(
-                leading: channel.icon != null
+                leading: channel.icon != null && channel.icon!.isNotEmpty
                     ? Image.network(
                         channel.icon!,
                         width: 50,
@@ -184,13 +184,17 @@ class _ChannelListState extends State<ChannelList> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16.0),
                     child: ListTile(
-                      leading: currently.icon != null
-                          ? Image.network(
-                              currently.icon!,
-                              width: 100,
-                              height: 100,
-                            )
-                          : null,
+                      leading:
+                          currently.icon != null && currently.icon!.isNotEmpty
+                              ? Image.network(
+                                  currently.icon!,
+                                  width: 100,
+                                  height: 100,
+                                )
+                              : const Icon(
+                                  Icons.camera_alt_outlined,
+                                  size: 64,
+                                ),
                       title: Text(currently.header),
                       subtitle: Text(
                         currently.description ?? '',

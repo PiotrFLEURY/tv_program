@@ -7,7 +7,7 @@ part 'database.g.dart';
 class ChannelTable extends Table {
   TextColumn get id => text().withLength(min: 0, max: 128)();
   TextColumn get name => text().withLength(min: 0, max: 128)();
-  TextColumn get icon => text().withLength(min: 0, max: 255)();
+  TextColumn get icon => text().withLength(min: 0, max: 512)();
   TextColumn get selectedProgram => text().withLength(min: 0, max: 32)();
 }
 
@@ -16,10 +16,10 @@ class ProgramTable extends Table {
   TextColumn get channel => text().references(ChannelTable, #id)();
   DateTimeColumn get start => dateTime()();
   DateTimeColumn get stop => dateTime()();
-  TextColumn get title => text().withLength(min: 0, max: 128)();
+  TextColumn get title => text().withLength(min: 0, max: 512)();
   TextColumn get description => text().withLength(min: 0, max: 4096)();
   TextColumn get categories => text().withLength(min: 0, max: 255)();
-  TextColumn get icon => text().withLength(min: 0, max: 255)();
+  TextColumn get icon => text().withLength(min: 0, max: 512)();
   TextColumn get ratingSystem => text().withLength(min: 0, max: 32)();
   TextColumn get ratingValue => text().withLength(min: 0, max: 32)();
   final List<Credit>? credits = [];

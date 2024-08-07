@@ -25,9 +25,19 @@ class XmlTvParser {
       return parseChannel(element);
     }).toList();
 
+    final now = DateTime.now();
+    final year = now.year;
+    final month = now.month.toString().padLeft(2, '0');
+    final day = now.day.toString().padLeft(2, '0');
+    final today = '$year$month$day';
+
     debugPrint('Parsing programs...');
     final programs = document
         .findAllElements('programme')
+        .where((element) {
+          final start = element.getAttribute('start');
+          return start?.startsWith(today) ?? false;
+        })
         .map((element) {
           return parseProgram(element);
         })
