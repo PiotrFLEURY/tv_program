@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tv_program/models/xml_tv.dart';
+import 'package:tv_program/views/widgets/safe_image.dart';
 
 class ChannelPage extends StatelessWidget {
   const ChannelPage({
@@ -13,55 +14,47 @@ class ChannelPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final channelPrograms =
+        programs.where((program) => program.channelId == channel.id);
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            if (channel.icon != null)
-              Image.network(
-                channel.icon!,
-                width: 50,
-                height: 50,
-              ),
-            const Spacer(),
-            Text(channel.name ?? 'no name'),
-            const Spacer(),
-          ],
-        ),
-      ),
-      body: ListView(
-        children: programs
-            .where((program) => program.channelId == channel.id)
-            .map((program) {
-          return Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: ListTile(
-              title:
-                  Text('${program.startTime} ${program.title ?? 'no title'}'),
-              subtitle: Text(program.description ?? 'no description'),
-              leading: program.icon != null
-                  ? Image.network(
-                      program.icon!,
-                      width: 100,
-                      height: 100,
-                    )
-                  : Container(
-                      width: 100,
-                      height: 100,
-                      color: Colors.grey[200],
-                      child: const Icon(
-                        Icons.camera_alt_outlined,
-                        size: 48,
-                      ),
-                    ),
-              onTap: () => Navigator.pushNamed(
-                context,
-                '/program',
-                arguments: program,
-              ),
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 200,
+            floating: false,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              background: SafeImage(url: channel.icon, size: 200),
+              title: Text('Aujourd' 'hui sur ${channel.name}'),
             ),
-          );
-        }).toList(),
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              childCount: channelPrograms.length,
+              (context, index) {
+                final program = channelPrograms.elementAt(index);
+                return Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: ListTile(
+                    title: Text(
+                        '${program.startTime} ${program.title ?? 'no title'}'),
+                    subtitle: Text(program.description ?? 'no description'),
+                    leading: SafeImage(
+                      url: program.icon,
+                      size: 100,
+                    ),
+                    onTap: () => Navigator.pushNamed(
+                      context,
+                      '/program',
+                      arguments: program,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

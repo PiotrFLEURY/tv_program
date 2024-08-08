@@ -17,6 +17,22 @@ class XmlTv {
     ).firstOrNull;
   }
 
+  Program? tonightOn(Channel channel) {
+    final now = DateTime.now();
+    final tonight = DateTime(now.year, now.month, now.day, 21, 00);
+    return programs.where(
+      (program) {
+        // return program starts around 9pm
+        final start = program.start!;
+        final stop = program.stop!;
+        return program.channelId == channel.id &&
+                start.hour == tonight.hour &&
+                start.isAfter(tonight) ||
+            start.isBefore(tonight) && stop.isAfter(tonight);
+      },
+    ).firstOrNull;
+  }
+
   List<Program> todaysOn(Channel channel) {
     return programs
         .where((program) => program.channelId == channel.id)

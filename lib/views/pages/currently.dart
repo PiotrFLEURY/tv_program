@@ -4,6 +4,7 @@ import 'package:tv_program/models/xml_tv.dart';
 import 'package:tv_program/providers/program_provider.dart';
 import 'package:tv_program/providers/selected_program.dart';
 import 'package:tv_program/services/service.dart';
+import 'package:tv_program/views/widgets/safe_image.dart';
 
 class CurrentlyPage extends ConsumerWidget {
   const CurrentlyPage({super.key});
@@ -13,21 +14,6 @@ class CurrentlyPage extends ConsumerWidget {
     final selectedProgram = ref.watch(selectedProgramProvider);
     final program = ref.watch(programProvider);
     return Scaffold(
-      appBar: AppBar(
-        title: Builder(
-          builder: (context) {
-            switch (selectedProgram) {
-              case TvService.tvTnt:
-                return const Text('En ce moment sur la TNT');
-              case TvService.tvFrance:
-                return const Text('En ce moment en France');
-              case TvService.allChannels:
-                return const Text('En ce moment partout dans le monde');
-            }
-            return const Text('En ce moment');
-          },
-        ),
-      ),
       body: program.when(
         data: (tvProgram) => ChannelList(tvProgram: tvProgram),
         loading: () => const Center(
@@ -70,6 +56,9 @@ class CurrentlyPage extends ConsumerWidget {
         ],
         currentIndex: _indexOf(selectedProgram),
         selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        selectedLabelStyle:
+            const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         onTap: (index) {
           switch (index) {
             case 0:
@@ -118,8 +107,20 @@ class ChannelList extends StatefulWidget {
   State<ChannelList> createState() => _ChannelListState();
 }
 
+enum PreviewMode {
+  currently,
+  tonight,
+}
+
 class _ChannelListState extends State<ChannelList> {
   var _filteredChannels = <Channel>[];
+  var _previewMode = PreviewMode.currently;
+
+  void _togglePreviewMode(bool value) {
+    setState(() {
+      _previewMode = value ? PreviewMode.tonight : PreviewMode.currently;
+    });
+  }
 
   void _onFilterChanged(String filter) {
     setState(() {
@@ -141,11 +142,18 @@ class _ChannelListState extends State<ChannelList> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: _filteredChannels.length + 1,
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return Padding(
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          floating: false,
+          pinned: true,
+          actions: [
+            Switch(
+              value: _previewMode == PreviewMode.tonight,
+              onChanged: _togglePreviewMode,
+            ),
+          ],
+          title: Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               decoration: const InputDecoration(
@@ -154,63 +162,75 @@ class _ChannelListState extends State<ChannelList> {
               ),
               onChanged: _onFilterChanged,
             ),
-          );
-        }
-        final channel = _filteredChannels[index - 1];
-        final currently = widget.tvProgram.currentlyOn(channel);
-        return InkWell(
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              '/channel',
-              arguments: (channel, widget.tvProgram.todaysOn(channel)),
-            );
-          },
-          child: Column(
-            children: [
-              ListTile(
-                leading: channel.icon != null && channel.icon!.isNotEmpty
-                    ? Image.network(
-                        channel.icon!,
-                        width: 50,
-                        height: 50,
-                      )
-                    : null,
-                title: Text(channel.name ?? ''),
-              ),
-              if (currently != null)
-                Container(
-                  color: Colors.grey[100],
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: ListTile(
-                      leading:
-                          currently.icon != null && currently.icon!.isNotEmpty
-                              ? Image.network(
-                                  currently.icon!,
-                                  width: 100,
-                                  height: 100,
-                                )
-                              : const Icon(
-                                  Icons.camera_alt_outlined,
-                                  size: 64,
-                                ),
-                      title: Text(currently.header),
-                      subtitle: Text(
-                        currently.description ?? '',
-                        overflow: TextOverflow.ellipsis,
+          ),
+          expandedHeight: 120,
+          flexibleSpace: FlexibleSpaceBar(
+            expandedTitleScale: 1,
+            collapseMode: CollapseMode.pin,
+            title: Text(
+              _previewMode == PreviewMode.currently
+                  ? 'En ce moment'
+                  : 'Ce soir',
+            ),
+          ),
+        ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              final channel = _filteredChannels[index];
+              final preview = _previewMode == PreviewMode.currently
+                  ? widget.tvProgram.currentlyOn(channel)
+                  : widget.tvProgram.tonightOn(channel);
+              return InkWell(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/channel',
+                    arguments: (channel, widget.tvProgram.todaysOn(channel)),
+                  );
+                },
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: SafeImage(url: channel.icon, size: 50),
+                      title: Text(
+                        channel.name ?? '',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      trailing: const Icon(
-                        Icons.arrow_forward_ios,
-                        size: 16,
+                      subtitle: Container(
+                        height: 1,
+                        color: Colors.grey[300],
                       ),
                     ),
-                  ),
+                    if (preview != null)
+                      Container(
+                        color: Colors.grey[100],
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: ListTile(
+                            leading: SafeImage(
+                              url: preview.icon,
+                              size: 100,
+                            ),
+                            title: Text(preview.header),
+                            subtitle: Text(
+                              preview.description ?? '',
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
-            ],
+              );
+            },
+            childCount: _filteredChannels.length,
           ),
-        );
-      },
+        ),
+      ],
     );
   }
 }

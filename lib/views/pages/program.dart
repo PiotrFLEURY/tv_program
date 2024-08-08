@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tv_program/models/xml_tv.dart';
+import 'package:tv_program/views/widgets/safe_image.dart';
 
 class ProgramPage extends StatelessWidget {
   const ProgramPage({super.key, required this.program});
@@ -20,8 +21,8 @@ class ProgramPage extends StatelessWidget {
             if (program.icon != null)
               Align(
                 alignment: Alignment.center,
-                child: Image.network(
-                  program.icon!,
+                child: SafeImage(
+                  url: program.icon,
                 ),
               ),
             // Start and Stop time
@@ -35,7 +36,7 @@ class ProgramPage extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Text(program.description ?? 'no description'),
             ),
-            program.episodeNum != null
+            program.episodeNum != null && program.episodeNum!.isNotEmpty
                 ? Text(
                     'Episode: ${program.episodeNum}',
                     style: const TextStyle(
@@ -46,7 +47,7 @@ class ProgramPage extends StatelessWidget {
             program.rating != null
                 ? Text('Rating: ${program.rating!.value}')
                 : const SizedBox(),
-            program.credits != null
+            program.credits != null && program.credits!.isNotEmpty
                 ? Text(
                     'Credits: ${program.credits!.map((credit) => credit.actors).join(', ')}',
                   )
