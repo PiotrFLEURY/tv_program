@@ -4,12 +4,14 @@ import 'dart:isolate';
 import 'package:flutter/services.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tv_program/models/xml_tv.dart';
+import 'package:tv_program/providers/selected_program.dart';
 import 'package:tv_program/providers/service_provider.dart';
 
-part 'program_provider.g.dart';
+part 'selected_program_content.g.dart';
 
 @riverpod
-Future<XmlTv> program(ProgramRef ref, String selectedProgram) {
+Future<XmlTv> selectedProgramContent(SelectedProgramContentRef ref) {
+  final selectedProgram = ref.watch(selectedProgramProvider);
   final service = ref.watch(tvServiceProvider);
 
   final rootIsolateToken = RootIsolateToken.instance!;

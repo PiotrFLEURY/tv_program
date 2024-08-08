@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:tv_program/views/pages/channel.dart';
 import 'package:tv_program/views/pages/currently.dart';
 import 'package:tv_program/models/xml_tv.dart';
-import 'package:tv_program/views/pages/loading.dart';
+//import 'package:tv_program/views/pages/loading.dart';
 import 'package:tv_program/views/pages/program.dart';
+import 'package:tv_program/views/pages/splash.dart';
 
 class TvProgram extends StatelessWidget {
   const TvProgram({super.key});
@@ -14,7 +15,7 @@ class TvProgram extends StatelessWidget {
       title: 'TV Program',
       initialRoute: '/',
       routes: {
-        '/': (context) => const LoadingPage(),
+        '/': (context) => const SplashPage(),
         '/currently': (context) => const CurrentlyPage(),
         '/channel': (context) {
           final (Channel, List<Program>) args = ModalRoute.of(context)!

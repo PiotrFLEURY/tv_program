@@ -38,7 +38,8 @@ class ChannelPage extends StatelessWidget {
                   padding: const EdgeInsets.all(4.0),
                   child: ListTile(
                     title: Text(
-                        '${program.startTime} ${program.title ?? 'no title'}'),
+                      '${program.startTime} ${program.title ?? 'no title'}',
+                    ),
                     subtitle: Text(program.description ?? 'no description'),
                     leading: SafeImage(
                       url: program.icon,

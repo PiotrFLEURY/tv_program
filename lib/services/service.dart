@@ -44,7 +44,7 @@ class TvService {
   }
 
   Future<XmlTv> getProgram(String selectedProgram) async {
-    debugPrint('Getting France TV program');
+    debugPrint('Getting TV program $selectedProgram');
 
     // Try to get the XML from the cache
     final containsTodayData = await database.containsTodayData(selectedProgram);

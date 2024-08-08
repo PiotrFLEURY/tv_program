@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tv_program/models/xml_tv.dart';
 import 'package:tv_program/providers/program_provider.dart';
 import 'package:tv_program/providers/selected_program.dart';
+import 'package:tv_program/providers/selected_program_content.dart';
 import 'package:tv_program/services/service.dart';
 import 'package:tv_program/views/widgets/safe_image.dart';
 
@@ -12,7 +13,7 @@ class CurrentlyPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedProgram = ref.watch(selectedProgramProvider);
-    final program = ref.watch(programProvider);
+    final program = ref.watch(selectedProgramContentProvider);
     return Scaffold(
       body: program.when(
         data: (tvProgram) => ChannelList(tvProgram: tvProgram),
@@ -30,53 +31,72 @@ class CurrentlyPage extends ConsumerWidget {
           child: Text('Error: $error'),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              'assets/images/Logo_TNT_HD.jpg',
-              width: selectedProgram == TvService.tvTnt ? 48 : 24,
+      bottomNavigationBar: Builder(
+        builder: (context) {
+          final francePrograms = ref.watch(programProvider(TvService.tvFrance));
+          final allPrograms = ref.watch(programProvider(TvService.allChannels));
+          return BottomNavigationBar(
+            items: [
+              BottomNavigationBarItem(
+                icon: Image.asset(
+                  'assets/images/Logo_TNT_HD.jpg',
+                  width: selectedProgram == TvService.tvTnt ? 48 : 24,
+                ),
+                label: 'TNT',
+              ),
+              BottomNavigationBarItem(
+                icon: francePrograms.when(
+                  data: (_) => Image.asset(
+                    'assets/images/FRANCE_FLAG.png',
+                    width: selectedProgram == TvService.tvFrance ? 48 : 24,
+                  ),
+                  error: (error, stackTrace) => const Icon(Icons.error),
+                  loading: () => const CircularProgressIndicator(),
+                ),
+                label: 'France',
+              ),
+              BottomNavigationBarItem(
+                icon: allPrograms.when(
+                  data: (_) => const Icon(Icons.tv),
+                  error: (error, stackTrace) => const Icon(Icons.error),
+                  loading: () => const CircularProgressIndicator(),
+                ),
+                label: 'Tout',
+              ),
+            ],
+            currentIndex: _indexOf(selectedProgram),
+            selectedItemColor: Colors.black,
+            unselectedItemColor: Colors.grey,
+            selectedLabelStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
             ),
-            label: 'TNT',
-          ),
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              'assets/images/FRANCE_FLAG.png',
-              width: selectedProgram == TvService.tvFrance ? 48 : 24,
-            ),
-            label: 'France',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.public,
-              size: selectedProgram == TvService.allChannels ? 48 : 24,
-            ),
-            label: 'Tout',
-          ),
-        ],
-        currentIndex: _indexOf(selectedProgram),
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        selectedLabelStyle:
-            const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              ref
-                  .read(selectedProgramProvider.notifier)
-                  .select(TvService.tvTnt);
-              break;
-            case 1:
-              ref
-                  .read(selectedProgramProvider.notifier)
-                  .select(TvService.tvFrance);
-              break;
-            case 2:
-              ref
-                  .read(selectedProgramProvider.notifier)
-                  .select(TvService.allChannels);
-              break;
-          }
+            onTap: (index) {
+              switch (index) {
+                case 0:
+                  ref
+                      .read(selectedProgramProvider.notifier)
+                      .select(TvService.tvTnt);
+                  break;
+                case 1:
+                  if (francePrograms.isLoading) {
+                    return;
+                  }
+                  ref
+                      .read(selectedProgramProvider.notifier)
+                      .select(TvService.tvFrance);
+                  break;
+                case 2:
+                  if (allPrograms.isLoading) {
+                    return;
+                  }
+                  ref
+                      .read(selectedProgramProvider.notifier)
+                      .select(TvService.allChannels);
+                  break;
+              }
+            },
+          );
         },
       ),
     );
