@@ -26,9 +26,9 @@ class XmlTv {
         final start = program.start!;
         final stop = program.stop!;
         return program.channelId == channel.id &&
-                start.hour == tonight.hour &&
-                start.isAfter(tonight) ||
-            start.isBefore(tonight) && stop.isAfter(tonight);
+            program.duration > const Duration(minutes: 30) &&
+            (start.hour == tonight.hour ||
+                start.hour == tonight.hour - 1 && stop.isAfter(tonight));
       },
     ).firstOrNull;
   }
@@ -82,6 +82,9 @@ class Program {
       '${stop!.hour.toString().padLeft(2, '0')}:${stop!.minute.toString().padLeft(2, '0')}';
 
   String get header => '$startTime - $endTime: $title';
+
+  get duration =>
+      stop != null && start != null ? stop!.difference(start!) : Duration.zero;
 }
 
 class Rating {
