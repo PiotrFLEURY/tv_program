@@ -132,15 +132,9 @@ enum PreviewMode {
   tonight,
 }
 
-class _ChannelListState extends State<ChannelList> {
+class _ChannelListState extends State<ChannelList>
+    with SingleTickerProviderStateMixin {
   var _filteredChannels = <Channel>[];
-  var _previewMode = PreviewMode.currently;
-
-  void _togglePreviewMode(bool value) {
-    setState(() {
-      _previewMode = value ? PreviewMode.tonight : PreviewMode.currently;
-    });
-  }
 
   void _onFilterChanged(String filter) {
     setState(() {
@@ -167,90 +161,118 @@ class _ChannelListState extends State<ChannelList> {
         SliverAppBar(
           floating: false,
           pinned: true,
-          actions: [
-            Switch(
-              value: _previewMode == PreviewMode.tonight,
-              onChanged: _togglePreviewMode,
-            ),
-          ],
           title: Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               decoration: const InputDecoration(
                 labelText: 'Filtre',
-                hintText: 'Entrez le nom d' 'une chaîne',
+                hintText: 'Entrez le nom d\'une chaîne',
+                prefixIcon: Icon(Icons.search),
               ),
               onChanged: _onFilterChanged,
             ),
           ),
-          expandedHeight: 120,
-          flexibleSpace: FlexibleSpaceBar(
-            expandedTitleScale: 1,
-            collapseMode: CollapseMode.pin,
-            title: Text(
-              _previewMode == PreviewMode.currently
-                  ? 'En ce moment'
-                  : 'Ce soir',
+        ),
+        SliverFillRemaining(
+          fillOverscroll: false,
+          child: DefaultTabController(
+            length: 2,
+            child: Scaffold(
+              appBar: const TabBar(
+                tabs: [
+                  Tab(text: 'En ce moment'),
+                  Tab(text: 'Ce soir'),
+                ],
+              ),
+              body: TabBarView(
+                children: [
+                  _buildChannelList(previewMode: PreviewMode.currently),
+                  _buildChannelList(previewMode: PreviewMode.tonight),
+                ],
+              ),
             ),
           ),
         ),
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              final channel = _filteredChannels[index];
-              final preview = _previewMode == PreviewMode.currently
-                  ? widget.tvProgram.currentlyOn(channel)
-                  : widget.tvProgram.tonightOn(channel);
-              return InkWell(
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/channel',
-                    arguments: (channel, widget.tvProgram.todaysOn(channel)),
-                  );
-                },
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: SafeImage(url: channel.icon, size: 50),
-                      title: Text(
-                        channel.name ?? '',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+      ],
+    );
+  }
+
+  Widget _buildChannelList({required PreviewMode previewMode}) {
+    if (_filteredChannels.isEmpty) {
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Icon(
+              Icons.tv_off,
+              size: 100,
+              color: Colors.grey,
+            ),
+            Text(
+              'Aucun résultat',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    return ListView.builder(
+      itemCount: _filteredChannels.length,
+      itemBuilder: (context, index) {
+        final channel = _filteredChannels[index];
+        final preview = previewMode == PreviewMode.currently
+            ? widget.tvProgram.currentlyOn(channel)
+            : widget.tvProgram.tonightOn(channel);
+        return InkWell(
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              '/channel',
+              arguments: (channel, widget.tvProgram.todaysOn(channel)),
+            );
+          },
+          child: Column(
+            children: [
+              ListTile(
+                leading: SafeImage(url: channel.icon, size: 50),
+                title: Text(
+                  channel.name ?? '',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                subtitle: Container(
+                  height: 1,
+                  color: Colors.grey[300],
+                ),
+              ),
+              if (preview != null)
+                Container(
+                  color: Colors.grey[100],
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: ListTile(
+                      leading: SafeImage(
+                        url: preview.icon,
+                        size: 100,
                       ),
-                      subtitle: Container(
-                        height: 1,
-                        color: Colors.grey[300],
+                      title: Text(preview.header),
+                      subtitle: Text(
+                        preview.description ?? '',
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    if (preview != null)
-                      Container(
-                        color: Colors.grey[100],
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: ListTile(
-                            leading: SafeImage(
-                              url: preview.icon,
-                              size: 100,
-                            ),
-                            title: Text(preview.header),
-                            subtitle: Text(
-                              preview.description ?? '',
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
+                  ),
                 ),
-              );
-            },
-            childCount: _filteredChannels.length,
+            ],
           ),
-        ),
-      ],
+        );
+      },
     );
   }
 }
