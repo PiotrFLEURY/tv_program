@@ -10,6 +10,20 @@
             "type": "dart"
         },
         {
+            "name": "tv_program (no cache)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "codeLens": {
+                "for": [
+                    "debug-file"
+                ]
+            },
+            "args": [
+                "--dart-define=NO_CACHE=true"
+            ]
+        },
+        {
             "name": "tv_program (profile mode)",
             "request": "launch",
             "type": "dart",

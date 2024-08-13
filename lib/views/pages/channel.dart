@@ -27,6 +27,7 @@ class ChannelPage extends StatelessWidget {
             flexibleSpace: FlexibleSpaceBar(
               background: SafeImage(url: channel.icon, size: 200),
               title: Text('Aujourd' 'hui sur ${channel.name}'),
+              expandedTitleScale: 1,
             ),
           ),
           SliverList(

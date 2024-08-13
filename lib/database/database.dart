@@ -103,7 +103,7 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Future<List<ChannelTableData>> getAllChannels(String selectedProgram) =>
-      (select(channelTable)
+      (select(channelTable, distinct: true)
             ..where((tbl) => tbl.selectedProgram.equals(selectedProgram)))
           .get();
 

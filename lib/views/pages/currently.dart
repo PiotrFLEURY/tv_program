@@ -138,7 +138,7 @@ class _ChannelListState extends State<ChannelList>
 
   void _onFilterChanged(String filter) {
     setState(() {
-      _filteredChannels = widget.tvProgram.channels
+      _filteredChannels = widget.tvProgram.channelsWithData
           .where(
             (channel) => channel.id!.toLowerCase().contains(
                   filter.toLowerCase(),
@@ -156,44 +156,37 @@ class _ChannelListState extends State<ChannelList>
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          floating: false,
-          pinned: true,
-          title: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              decoration: const InputDecoration(
-                labelText: 'Filtre',
-                hintText: 'Entrez le nom d\'une chaîne',
-                prefixIcon: Icon(Icons.search),
-              ),
-              onChanged: _onFilterChanged,
+    return Scaffold(
+      appBar: AppBar(
+        title: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            decoration: const InputDecoration(
+              labelText: 'Filtre',
+              hintText: 'Entrez le nom d\'une chaîne',
+              prefixIcon: Icon(Icons.search),
             ),
+            onChanged: _onFilterChanged,
           ),
         ),
-        SliverFillRemaining(
-          fillOverscroll: false,
-          child: DefaultTabController(
-            length: 2,
-            child: Scaffold(
-              appBar: const TabBar(
-                tabs: [
-                  Tab(text: 'En ce moment'),
-                  Tab(text: 'Ce soir'),
-                ],
-              ),
-              body: TabBarView(
-                children: [
-                  _buildChannelList(previewMode: PreviewMode.currently),
-                  _buildChannelList(previewMode: PreviewMode.tonight),
-                ],
-              ),
-            ),
+      ),
+      body: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: const TabBar(
+            tabs: [
+              Tab(text: 'En ce moment'),
+              Tab(text: 'Ce soir'),
+            ],
+          ),
+          body: TabBarView(
+            children: [
+              _buildChannelList(previewMode: PreviewMode.currently),
+              _buildChannelList(previewMode: PreviewMode.tonight),
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 
@@ -239,13 +232,6 @@ class _ChannelListState extends State<ChannelList>
             children: [
               ListTile(
                 leading: SafeImage(url: channel.icon, size: 50),
-                title: Text(
-                  channel.name ?? '',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
                 subtitle: Container(
                   height: 1,
                   color: Colors.grey[300],

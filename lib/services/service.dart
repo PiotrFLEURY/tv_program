@@ -31,6 +31,8 @@ class TvService {
 
   final XmlTvParser parser;
   final AppDatabase database;
+  final bool noCache =
+      const bool.fromEnvironment('NO_CACHE', defaultValue: false);
 
   Future<Uint8List> downloadProgram(String path) async {
     final url = '$baseUrl/$path.$zipFormat';
@@ -49,7 +51,7 @@ class TvService {
     // Try to get the XML from the cache
     final containsTodayData = await database.containsTodayData(selectedProgram);
 
-    if (!containsTodayData) {
+    if (!containsTodayData || noCache) {
       // Read the XZ file into a Uint8List
       final xzBytes = await downloadProgram(selectedProgram);
 

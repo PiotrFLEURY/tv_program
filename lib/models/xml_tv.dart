@@ -2,6 +2,12 @@ class XmlTv {
   final List<Channel> channels;
   final List<Program> programs;
 
+  List<Channel> get channelsWithData => channels.where((channel) {
+        return programs.where((program) {
+          return program.channelId == channel.id;
+        }).isNotEmpty;
+      }).toList();
+
   XmlTv({required this.channels, required this.programs});
 
   Program? currentlyOn(Channel channel) {
