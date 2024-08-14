@@ -41,7 +41,8 @@ class ChannelPage extends StatelessWidget {
                     title: Text(
                       '${program.startTime} ${program.title ?? 'no title'}',
                     ),
-                    subtitle: Text(program.description ?? 'no description'),
+                    subtitle:
+                        Text(program.shortDescription ?? 'no description'),
                     leading: SafeImage(
                       url: program.icon,
                       size: 100,

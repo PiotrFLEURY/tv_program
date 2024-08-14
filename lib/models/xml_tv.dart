@@ -91,6 +91,10 @@ class Program {
 
   get duration =>
       stop != null && start != null ? stop!.difference(start!) : Duration.zero;
+
+  get shortDescription => description != null && description!.length > 100
+      ? '${description!.substring(0, 100)}...'
+      : description;
 }
 
 class Rating {
