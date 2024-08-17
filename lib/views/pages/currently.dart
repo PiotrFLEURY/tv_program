@@ -6,6 +6,7 @@ import 'package:tv_program/providers/selected_program.dart';
 import 'package:tv_program/providers/selected_program_content.dart';
 import 'package:tv_program/services/service.dart';
 import 'package:tv_program/views/widgets/safe_image.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CurrentlyPage extends ConsumerWidget {
   const CurrentlyPage({super.key});
@@ -134,17 +135,31 @@ enum PreviewMode {
 
 class _ChannelListState extends State<ChannelList>
     with SingleTickerProviderStateMixin {
+  static const _kFavoritesKey = 'favorites';
+  static const _kShowFavoritesKey = 'showFavorites';
+
   var _filteredChannels = <Channel>[];
+  var _favoriteChannelNames = <String>[];
+  var _showFavorites = false;
+
+  final _filterController = TextEditingController();
 
   void _onFilterChanged(String filter) {
     setState(() {
-      _filteredChannels = widget.tvProgram.channelsWithData
-          .where(
-            (channel) => channel.id!.toLowerCase().contains(
-                  filter.toLowerCase(),
-                ),
-          )
-          .toList();
+      if (filter.isEmpty && _showFavorites) {
+        _filteredChannels = widget.tvProgram.channelsWithData
+            .where(
+              (channel) => _favoriteChannelNames.contains(channel.id),
+            )
+            .toList();
+      } else {
+        _filteredChannels = widget.tvProgram.channelsWithData
+            .where(
+              (channel) =>
+                  channel.id!.toLowerCase().contains(filter.toLowerCase()),
+            )
+            .toList();
+      }
     });
   }
 
@@ -152,6 +167,46 @@ class _ChannelListState extends State<ChannelList>
   void initState() {
     super.initState();
     _filteredChannels = widget.tvProgram.channels;
+    _initFavorites();
+  }
+
+  void _initFavorites() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _favoriteChannelNames = prefs.getStringList(_kFavoritesKey) ?? [];
+      _showFavorites = prefs.getBool(_kShowFavoritesKey) ?? false;
+    });
+    _onFilterChanged('');
+  }
+
+  void _toggleFavorite(Channel channel) {
+    setState(() {
+      if (_favoriteChannelNames.contains(channel.id)) {
+        _favoriteChannelNames.remove(channel.id);
+      } else {
+        _favoriteChannelNames.add(channel.id!);
+      }
+    });
+    final prefs = SharedPreferences.getInstance();
+    prefs.then((value) {
+      value.setStringList(_kFavoritesKey, _favoriteChannelNames);
+    });
+    _onFilterChanged(_filterController.text);
+  }
+
+  void _toggleShowFavorites() {
+    setState(() {
+      _showFavorites = !_showFavorites;
+    });
+    SharedPreferences.getInstance().then((value) {
+      value.setBool(_kShowFavoritesKey, _showFavorites);
+    });
+    _onFilterChanged(_filterController.text);
+  }
+
+  void _clearFilter() {
+    _filterController.clear();
+    _onFilterChanged('');
   }
 
   @override
@@ -161,14 +216,35 @@ class _ChannelListState extends State<ChannelList>
         title: Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextField(
-            decoration: const InputDecoration(
+            controller: _filterController,
+            decoration: InputDecoration(
               labelText: 'Filtre',
               hintText: 'Entrez le nom d\'une chaîne',
-              prefixIcon: Icon(Icons.search),
+              prefixIcon: const Icon(Icons.search),
+              suffixIcon: _filterController.text.isNotEmpty
+                  ? IconButton(
+                      tooltip: 'Effacer le filtre',
+                      onPressed: _clearFilter,
+                      icon: const Icon(
+                        Icons.clear,
+                      ),
+                    )
+                  : null,
             ),
             onChanged: _onFilterChanged,
           ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              _showFavorites ? Icons.star : Icons.star_border,
+              color: _showFavorites ? Colors.yellow[800] : Colors.grey,
+            ),
+            onPressed: _toggleShowFavorites,
+            tooltip:
+                _showFavorites ? 'Masquer les favoris' : 'Afficher les favoris',
+          ),
+        ],
       ),
       body: DefaultTabController(
         length: 2,
@@ -192,20 +268,34 @@ class _ChannelListState extends State<ChannelList>
 
   Widget _buildChannelList({required PreviewMode previewMode}) {
     if (_filteredChannels.isEmpty) {
-      return const Center(
+      return Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.tv_off,
+              _showFavorites ? Icons.star_half : Icons.search_rounded,
               size: 100,
               color: Colors.grey,
             ),
+            const SizedBox(height: 48),
             Text(
-              'Aucun résultat',
-              style: TextStyle(
+              _showFavorites ? 'Aucune chaîne favorite' : 'Aucun résultat',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
                 color: Colors.grey,
                 fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              _showFavorites
+                  ? 'Cliquez sur l\'étoile pour en ajouter'
+                  : 'Essayez une autre recherche',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.grey,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -231,11 +321,33 @@ class _ChannelListState extends State<ChannelList>
           child: Column(
             children: [
               ListTile(
-                leading: SafeImage(url: channel.icon, size: 50),
+                leading: Hero(
+                  tag: channel.icon!,
+                  child: SafeImage(
+                    url: channel.icon,
+                    size: 50,
+                  ),
+                ),
                 subtitle: Container(
                   height: 1,
                   color: Colors.grey[300],
                 ),
+                trailing: _showFavorites
+                    ? null
+                    : IconButton(
+                        tooltip: _favoriteChannelNames.contains(channel.id)
+                            ? 'Retirer ${channel.name} des favoris'
+                            : 'Ajouter ${channel.name} aux favoris',
+                        icon: Icon(
+                          _favoriteChannelNames.contains(channel.id)
+                              ? Icons.star
+                              : Icons.star_border,
+                          color: _favoriteChannelNames.contains(channel.id)
+                              ? Colors.yellow[800]
+                              : Colors.grey,
+                        ),
+                        onPressed: () => _toggleFavorite(channel),
+                      ),
               ),
               if (preview != null)
                 Container(

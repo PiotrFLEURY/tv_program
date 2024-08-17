@@ -45,6 +45,7 @@ dependencies:
   riverpod_annotation: ^2.3.5
   drift: ^2.19.1+1
   drift_flutter: ^0.1.0
+  shared_preferences: ^2.3.2
 
 dev_dependencies:
   flutter_test:

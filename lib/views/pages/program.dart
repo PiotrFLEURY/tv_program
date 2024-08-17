@@ -21,8 +21,11 @@ class ProgramPage extends StatelessWidget {
             if (program.icon != null)
               Align(
                 alignment: Alignment.center,
-                child: SafeImage(
-                  url: program.icon,
+                child: Hero(
+                  tag: '${program.startTime}${program.icon}',
+                  child: SafeImage(
+                    url: program.icon,
+                  ),
                 ),
               ),
             // Start and Stop time

@@ -25,7 +25,13 @@ class ChannelPage extends StatelessWidget {
             floating: false,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              background: SafeImage(url: channel.icon, size: 200),
+              background: Hero(
+                tag: channel.icon!,
+                child: SafeImage(
+                  url: channel.icon,
+                  size: 200,
+                ),
+              ),
               title: Text('Aujourd' 'hui sur ${channel.name}'),
               expandedTitleScale: 1,
             ),
@@ -43,9 +49,12 @@ class ChannelPage extends StatelessWidget {
                     ),
                     subtitle:
                         Text(program.shortDescription ?? 'no description'),
-                    leading: SafeImage(
-                      url: program.icon,
-                      size: 100,
+                    leading: Hero(
+                      tag: '${program.startTime}${program.icon}',
+                      child: SafeImage(
+                        url: program.icon,
+                        size: 100,
+                      ),
                     ),
                     onTap: () => Navigator.pushNamed(
                       context,

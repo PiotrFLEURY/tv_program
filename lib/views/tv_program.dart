@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:tv_program/views/pages/channel.dart';
 import 'package:tv_program/views/pages/currently.dart';
 import 'package:tv_program/models/xml_tv.dart';
-//import 'package:tv_program/views/pages/loading.dart';
 import 'package:tv_program/views/pages/program.dart';
 import 'package:tv_program/views/pages/splash.dart';
 
@@ -14,6 +13,7 @@ class TvProgram extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: kDebugMode,
+      showSemanticsDebugger: false,
       title: 'TV Program',
       initialRoute: '/',
       routes: {
