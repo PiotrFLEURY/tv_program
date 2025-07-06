@@ -6,7 +6,7 @@ part of 'program_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$programHash() => r'919fba2ab693b04d69f0a9193d40bd5fc43d7040';
+String _$programHash() => r'2bf735e3bbefaae0f3c70f9309d65741b551f0c4';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -141,6 +141,8 @@ class ProgramProvider extends AutoDisposeFutureProvider<XmlTv> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin ProgramRef on AutoDisposeFutureProviderRef<XmlTv> {
   /// The parameter `selectedProgram` of this provider.
   String get selectedProgram;
@@ -154,4 +156,4 @@ class _ProgramProviderElement extends AutoDisposeFutureProviderElement<XmlTv>
   String get selectedProgram => (origin as ProgramProvider).selectedProgram;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -123,17 +123,18 @@ class AppDatabase extends _$AppDatabase {
     return count > 0;
   }
 
-  saveTodayData(String selectedProgram, XmlTv parsedData) {
+  Future<void> saveTodayData(String selectedProgram, XmlTv parsedData) async {
     // cleanup old data
-    (delete(programTable)
+    await (delete(programTable)
           ..where((tbl) => tbl.selectedProgram.equals(selectedProgram)))
         .go();
-    (delete(channelTable)
-      ..where((tbl) => tbl.selectedProgram.equals(selectedProgram)));
+    await (delete(channelTable)
+          ..where((tbl) => tbl.selectedProgram.equals(selectedProgram)))
+        .go();
 
     // insert new data
-    insertChannels(selectedProgram, parsedData.channels);
-    insertPrograms(selectedProgram, parsedData.programs);
+    await insertChannels(selectedProgram, parsedData.channels);
+    await insertPrograms(selectedProgram, parsedData.programs);
   }
 
   Future<XmlTv> getTodayData(String selectedProgram) async {

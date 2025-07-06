@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:test/test.dart';
 import 'package:tv_program/services/xml_tv_parser.dart';
 
-main() {
+void main() {
   test('should parse', () {
     final xml = File('test/xml_tv.xml').readAsStringSync();
 

@@ -1456,22 +1456,158 @@ typedef $$ChannelTableTableUpdateCompanionBuilder = ChannelTableCompanion
   Value<int> rowid,
 });
 
+final class $$ChannelTableTableReferences extends BaseReferences<_$AppDatabase,
+    $ChannelTableTable, ChannelTableData> {
+  $$ChannelTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$ProgramTableTable, List<ProgramTableData>>
+      _programTableRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.programTable,
+              aliasName: $_aliasNameGenerator(
+                  db.channelTable.id, db.programTable.channel));
+
+  $$ProgramTableTableProcessedTableManager get programTableRefs {
+    final manager = $$ProgramTableTableTableManager($_db, $_db.programTable)
+        .filter((f) => f.channel.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_programTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$ChannelTableTableFilterComposer
+    extends Composer<_$AppDatabase, $ChannelTableTable> {
+  $$ChannelTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get selectedProgram => $composableBuilder(
+      column: $table.selectedProgram,
+      builder: (column) => ColumnFilters(column));
+
+  Expression<bool> programTableRefs(
+      Expression<bool> Function($$ProgramTableTableFilterComposer f) f) {
+    final $$ProgramTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.programTable,
+        getReferencedColumn: (t) => t.channel,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ProgramTableTableFilterComposer(
+              $db: $db,
+              $table: $db.programTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$ChannelTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $ChannelTableTable> {
+  $$ChannelTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get selectedProgram => $composableBuilder(
+      column: $table.selectedProgram,
+      builder: (column) => ColumnOrderings(column));
+}
+
+class $$ChannelTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ChannelTableTable> {
+  $$ChannelTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get icon =>
+      $composableBuilder(column: $table.icon, builder: (column) => column);
+
+  GeneratedColumn<String> get selectedProgram => $composableBuilder(
+      column: $table.selectedProgram, builder: (column) => column);
+
+  Expression<T> programTableRefs<T extends Object>(
+      Expression<T> Function($$ProgramTableTableAnnotationComposer a) f) {
+    final $$ProgramTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.programTable,
+        getReferencedColumn: (t) => t.channel,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ProgramTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.programTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
 class $$ChannelTableTableTableManager extends RootTableManager<
     _$AppDatabase,
     $ChannelTableTable,
     ChannelTableData,
     $$ChannelTableTableFilterComposer,
     $$ChannelTableTableOrderingComposer,
+    $$ChannelTableTableAnnotationComposer,
     $$ChannelTableTableCreateCompanionBuilder,
-    $$ChannelTableTableUpdateCompanionBuilder> {
+    $$ChannelTableTableUpdateCompanionBuilder,
+    (ChannelTableData, $$ChannelTableTableReferences),
+    ChannelTableData,
+    PrefetchHooks Function({bool programTableRefs})> {
   $$ChannelTableTableTableManager(_$AppDatabase db, $ChannelTableTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$ChannelTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$ChannelTableTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$ChannelTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ChannelTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ChannelTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<String> name = const Value.absent(),
@@ -1500,70 +1636,51 @@ class $$ChannelTableTableTableManager extends RootTableManager<
             selectedProgram: selectedProgram,
             rowid: rowid,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$ChannelTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({programTableRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (programTableRefs) db.programTable],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (programTableRefs)
+                    await $_getPrefetchedData<ChannelTableData,
+                            $ChannelTableTable, ProgramTableData>(
+                        currentTable: table,
+                        referencedTable: $$ChannelTableTableReferences
+                            ._programTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ChannelTableTableReferences(db, table, p0)
+                                .programTableRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.channel == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
         ));
 }
 
-class $$ChannelTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $ChannelTableTable> {
-  $$ChannelTableTableFilterComposer(super.$state);
-  ColumnFilters<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get name => $state.composableBuilder(
-      column: $state.table.name,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get icon => $state.composableBuilder(
-      column: $state.table.icon,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get selectedProgram => $state.composableBuilder(
-      column: $state.table.selectedProgram,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ComposableFilter programTableRefs(
-      ComposableFilter Function($$ProgramTableTableFilterComposer f) f) {
-    final $$ProgramTableTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $state.db.programTable,
-        getReferencedColumn: (t) => t.channel,
-        builder: (joinBuilder, parentComposers) =>
-            $$ProgramTableTableFilterComposer(ComposerState($state.db,
-                $state.db.programTable, joinBuilder, parentComposers)));
-    return f(composer);
-  }
-}
-
-class $$ChannelTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $ChannelTableTable> {
-  $$ChannelTableTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get name => $state.composableBuilder(
-      column: $state.table.name,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get icon => $state.composableBuilder(
-      column: $state.table.icon,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get selectedProgram => $state.composableBuilder(
-      column: $state.table.selectedProgram,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
-
+typedef $$ChannelTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $ChannelTableTable,
+    ChannelTableData,
+    $$ChannelTableTableFilterComposer,
+    $$ChannelTableTableOrderingComposer,
+    $$ChannelTableTableAnnotationComposer,
+    $$ChannelTableTableCreateCompanionBuilder,
+    $$ChannelTableTableUpdateCompanionBuilder,
+    (ChannelTableData, $$ChannelTableTableReferences),
+    ChannelTableData,
+    PrefetchHooks Function({bool programTableRefs})>;
 typedef $$ProgramTableTableCreateCompanionBuilder = ProgramTableCompanion
     Function({
   Value<int> id,
@@ -1595,22 +1712,240 @@ typedef $$ProgramTableTableUpdateCompanionBuilder = ProgramTableCompanion
   Value<String> selectedProgram,
 });
 
+final class $$ProgramTableTableReferences extends BaseReferences<_$AppDatabase,
+    $ProgramTableTable, ProgramTableData> {
+  $$ProgramTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $ChannelTableTable _channelTable(_$AppDatabase db) =>
+      db.channelTable.createAlias(
+          $_aliasNameGenerator(db.programTable.channel, db.channelTable.id));
+
+  $$ChannelTableTableProcessedTableManager get channel {
+    final $_column = $_itemColumn<String>('channel')!;
+
+    final manager = $$ChannelTableTableTableManager($_db, $_db.channelTable)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_channelTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$ProgramTableTableFilterComposer
+    extends Composer<_$AppDatabase, $ProgramTableTable> {
+  $$ProgramTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get start => $composableBuilder(
+      column: $table.start, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get stop => $composableBuilder(
+      column: $table.stop, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get categories => $composableBuilder(
+      column: $table.categories, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get ratingSystem => $composableBuilder(
+      column: $table.ratingSystem, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get ratingValue => $composableBuilder(
+      column: $table.ratingValue, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get episodeNum => $composableBuilder(
+      column: $table.episodeNum, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get selectedProgram => $composableBuilder(
+      column: $table.selectedProgram,
+      builder: (column) => ColumnFilters(column));
+
+  $$ChannelTableTableFilterComposer get channel {
+    final $$ChannelTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.channel,
+        referencedTable: $db.channelTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChannelTableTableFilterComposer(
+              $db: $db,
+              $table: $db.channelTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ProgramTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $ProgramTableTable> {
+  $$ProgramTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get start => $composableBuilder(
+      column: $table.start, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get stop => $composableBuilder(
+      column: $table.stop, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get categories => $composableBuilder(
+      column: $table.categories, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get ratingSystem => $composableBuilder(
+      column: $table.ratingSystem,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get ratingValue => $composableBuilder(
+      column: $table.ratingValue, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get episodeNum => $composableBuilder(
+      column: $table.episodeNum, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get selectedProgram => $composableBuilder(
+      column: $table.selectedProgram,
+      builder: (column) => ColumnOrderings(column));
+
+  $$ChannelTableTableOrderingComposer get channel {
+    final $$ChannelTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.channel,
+        referencedTable: $db.channelTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChannelTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.channelTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ProgramTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ProgramTableTable> {
+  $$ProgramTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get start =>
+      $composableBuilder(column: $table.start, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get stop =>
+      $composableBuilder(column: $table.stop, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => column);
+
+  GeneratedColumn<String> get categories => $composableBuilder(
+      column: $table.categories, builder: (column) => column);
+
+  GeneratedColumn<String> get icon =>
+      $composableBuilder(column: $table.icon, builder: (column) => column);
+
+  GeneratedColumn<String> get ratingSystem => $composableBuilder(
+      column: $table.ratingSystem, builder: (column) => column);
+
+  GeneratedColumn<String> get ratingValue => $composableBuilder(
+      column: $table.ratingValue, builder: (column) => column);
+
+  GeneratedColumn<String> get episodeNum => $composableBuilder(
+      column: $table.episodeNum, builder: (column) => column);
+
+  GeneratedColumn<String> get selectedProgram => $composableBuilder(
+      column: $table.selectedProgram, builder: (column) => column);
+
+  $$ChannelTableTableAnnotationComposer get channel {
+    final $$ChannelTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.channel,
+        referencedTable: $db.channelTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChannelTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.channelTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
 class $$ProgramTableTableTableManager extends RootTableManager<
     _$AppDatabase,
     $ProgramTableTable,
     ProgramTableData,
     $$ProgramTableTableFilterComposer,
     $$ProgramTableTableOrderingComposer,
+    $$ProgramTableTableAnnotationComposer,
     $$ProgramTableTableCreateCompanionBuilder,
-    $$ProgramTableTableUpdateCompanionBuilder> {
+    $$ProgramTableTableUpdateCompanionBuilder,
+    (ProgramTableData, $$ProgramTableTableReferences),
+    ProgramTableData,
+    PrefetchHooks Function({bool channel})> {
   $$ProgramTableTableTableManager(_$AppDatabase db, $ProgramTableTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$ProgramTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$ProgramTableTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$ProgramTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ProgramTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ProgramTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> channel = const Value.absent(),
@@ -1667,164 +2002,62 @@ class $$ProgramTableTableTableManager extends RootTableManager<
             episodeNum: episodeNum,
             selectedProgram: selectedProgram,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$ProgramTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({channel = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (channel) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.channel,
+                    referencedTable:
+                        $$ProgramTableTableReferences._channelTable(db),
+                    referencedColumn:
+                        $$ProgramTableTableReferences._channelTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ));
 }
 
-class $$ProgramTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $ProgramTableTable> {
-  $$ProgramTableTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get start => $state.composableBuilder(
-      column: $state.table.start,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get stop => $state.composableBuilder(
-      column: $state.table.stop,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get title => $state.composableBuilder(
-      column: $state.table.title,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get description => $state.composableBuilder(
-      column: $state.table.description,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get categories => $state.composableBuilder(
-      column: $state.table.categories,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get icon => $state.composableBuilder(
-      column: $state.table.icon,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get ratingSystem => $state.composableBuilder(
-      column: $state.table.ratingSystem,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get ratingValue => $state.composableBuilder(
-      column: $state.table.ratingValue,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get episodeNum => $state.composableBuilder(
-      column: $state.table.episodeNum,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get selectedProgram => $state.composableBuilder(
-      column: $state.table.selectedProgram,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  $$ChannelTableTableFilterComposer get channel {
-    final $$ChannelTableTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.channel,
-        referencedTable: $state.db.channelTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ChannelTableTableFilterComposer(ComposerState($state.db,
-                $state.db.channelTable, joinBuilder, parentComposers)));
-    return composer;
-  }
-
-  ComposableFilter creditTableRefs(
-      ComposableFilter Function($$CreditTableTableFilterComposer f) f) {
-    final $$CreditTableTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $state.db.creditTable,
-        getReferencedColumn: (t) => t.program,
-        builder: (joinBuilder, parentComposers) =>
-            $$CreditTableTableFilterComposer(ComposerState($state.db,
-                $state.db.creditTable, joinBuilder, parentComposers)));
-    return f(composer);
-  }
-}
-
-class $$ProgramTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $ProgramTableTable> {
-  $$ProgramTableTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get start => $state.composableBuilder(
-      column: $state.table.start,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get stop => $state.composableBuilder(
-      column: $state.table.stop,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get title => $state.composableBuilder(
-      column: $state.table.title,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get description => $state.composableBuilder(
-      column: $state.table.description,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get categories => $state.composableBuilder(
-      column: $state.table.categories,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get icon => $state.composableBuilder(
-      column: $state.table.icon,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get ratingSystem => $state.composableBuilder(
-      column: $state.table.ratingSystem,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get ratingValue => $state.composableBuilder(
-      column: $state.table.ratingValue,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get episodeNum => $state.composableBuilder(
-      column: $state.table.episodeNum,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get selectedProgram => $state.composableBuilder(
-      column: $state.table.selectedProgram,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  $$ChannelTableTableOrderingComposer get channel {
-    final $$ChannelTableTableOrderingComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.channel,
-        referencedTable: $state.db.channelTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ChannelTableTableOrderingComposer(ComposerState($state.db,
-                $state.db.channelTable, joinBuilder, parentComposers)));
-    return composer;
-  }
-}
-
+typedef $$ProgramTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $ProgramTableTable,
+    ProgramTableData,
+    $$ProgramTableTableFilterComposer,
+    $$ProgramTableTableOrderingComposer,
+    $$ProgramTableTableAnnotationComposer,
+    $$ProgramTableTableCreateCompanionBuilder,
+    $$ProgramTableTableUpdateCompanionBuilder,
+    (ProgramTableData, $$ProgramTableTableReferences),
+    ProgramTableData,
+    PrefetchHooks Function({bool channel})>;
 typedef $$CreditTableTableCreateCompanionBuilder = CreditTableCompanion
     Function({
   Value<int> id,
@@ -1852,22 +2085,144 @@ typedef $$CreditTableTableUpdateCompanionBuilder = CreditTableCompanion
   Value<String> selectedProgram,
 });
 
+class $$CreditTableTableFilterComposer
+    extends Composer<_$AppDatabase, $CreditTableTable> {
+  $$CreditTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get guests => $composableBuilder(
+      column: $table.guests, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get directors => $composableBuilder(
+      column: $table.directors, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get actors => $composableBuilder(
+      column: $table.actors, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get adapters => $composableBuilder(
+      column: $table.adapters, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get producers => $composableBuilder(
+      column: $table.producers, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get composers => $composableBuilder(
+      column: $table.composers, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get editors => $composableBuilder(
+      column: $table.editors, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get selectedProgram => $composableBuilder(
+      column: $table.selectedProgram,
+      builder: (column) => ColumnFilters(column));
+}
+
+class $$CreditTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $CreditTableTable> {
+  $$CreditTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get guests => $composableBuilder(
+      column: $table.guests, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get directors => $composableBuilder(
+      column: $table.directors, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get actors => $composableBuilder(
+      column: $table.actors, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get adapters => $composableBuilder(
+      column: $table.adapters, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get producers => $composableBuilder(
+      column: $table.producers, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get composers => $composableBuilder(
+      column: $table.composers, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get editors => $composableBuilder(
+      column: $table.editors, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get selectedProgram => $composableBuilder(
+      column: $table.selectedProgram,
+      builder: (column) => ColumnOrderings(column));
+}
+
+class $$CreditTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CreditTableTable> {
+  $$CreditTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get guests =>
+      $composableBuilder(column: $table.guests, builder: (column) => column);
+
+  GeneratedColumn<String> get directors =>
+      $composableBuilder(column: $table.directors, builder: (column) => column);
+
+  GeneratedColumn<String> get actors =>
+      $composableBuilder(column: $table.actors, builder: (column) => column);
+
+  GeneratedColumn<String> get adapters =>
+      $composableBuilder(column: $table.adapters, builder: (column) => column);
+
+  GeneratedColumn<String> get producers =>
+      $composableBuilder(column: $table.producers, builder: (column) => column);
+
+  GeneratedColumn<String> get composers =>
+      $composableBuilder(column: $table.composers, builder: (column) => column);
+
+  GeneratedColumn<String> get editors =>
+      $composableBuilder(column: $table.editors, builder: (column) => column);
+
+  GeneratedColumn<String> get selectedProgram => $composableBuilder(
+      column: $table.selectedProgram, builder: (column) => column);
+}
+
 class $$CreditTableTableTableManager extends RootTableManager<
     _$AppDatabase,
     $CreditTableTable,
     CreditTableData,
     $$CreditTableTableFilterComposer,
     $$CreditTableTableOrderingComposer,
+    $$CreditTableTableAnnotationComposer,
     $$CreditTableTableCreateCompanionBuilder,
-    $$CreditTableTableUpdateCompanionBuilder> {
+    $$CreditTableTableUpdateCompanionBuilder,
+    (
+      CreditTableData,
+      BaseReferences<_$AppDatabase, $CreditTableTable, CreditTableData>
+    ),
+    CreditTableData,
+    PrefetchHooks Function()> {
   $$CreditTableTableTableManager(_$AppDatabase db, $CreditTableTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$CreditTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$CreditTableTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$CreditTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CreditTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CreditTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> program = const Value.absent(),
@@ -1916,130 +2271,28 @@ class $$CreditTableTableTableManager extends RootTableManager<
             editors: editors,
             selectedProgram: selectedProgram,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
         ));
 }
 
-class $$CreditTableTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $CreditTableTable> {
-  $$CreditTableTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get guests => $state.composableBuilder(
-      column: $state.table.guests,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get directors => $state.composableBuilder(
-      column: $state.table.directors,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get actors => $state.composableBuilder(
-      column: $state.table.actors,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get adapters => $state.composableBuilder(
-      column: $state.table.adapters,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get producers => $state.composableBuilder(
-      column: $state.table.producers,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get composers => $state.composableBuilder(
-      column: $state.table.composers,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get editors => $state.composableBuilder(
-      column: $state.table.editors,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get selectedProgram => $state.composableBuilder(
-      column: $state.table.selectedProgram,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  $$ProgramTableTableFilterComposer get program {
-    final $$ProgramTableTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.program,
-        referencedTable: $state.db.programTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ProgramTableTableFilterComposer(ComposerState($state.db,
-                $state.db.programTable, joinBuilder, parentComposers)));
-    return composer;
-  }
-}
-
-class $$CreditTableTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $CreditTableTable> {
-  $$CreditTableTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get guests => $state.composableBuilder(
-      column: $state.table.guests,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get directors => $state.composableBuilder(
-      column: $state.table.directors,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get actors => $state.composableBuilder(
-      column: $state.table.actors,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get adapters => $state.composableBuilder(
-      column: $state.table.adapters,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get producers => $state.composableBuilder(
-      column: $state.table.producers,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get composers => $state.composableBuilder(
-      column: $state.table.composers,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get editors => $state.composableBuilder(
-      column: $state.table.editors,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get selectedProgram => $state.composableBuilder(
-      column: $state.table.selectedProgram,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  $$ProgramTableTableOrderingComposer get program {
-    final $$ProgramTableTableOrderingComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.program,
-        referencedTable: $state.db.programTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$ProgramTableTableOrderingComposer(ComposerState($state.db,
-                $state.db.programTable, joinBuilder, parentComposers)));
-    return composer;
-  }
-}
+typedef $$CreditTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $CreditTableTable,
+    CreditTableData,
+    $$CreditTableTableFilterComposer,
+    $$CreditTableTableOrderingComposer,
+    $$CreditTableTableAnnotationComposer,
+    $$CreditTableTableCreateCompanionBuilder,
+    $$CreditTableTableUpdateCompanionBuilder,
+    (
+      CreditTableData,
+      BaseReferences<_$AppDatabase, $CreditTableTable, CreditTableData>
+    ),
+    CreditTableData,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;

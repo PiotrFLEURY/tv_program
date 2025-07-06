@@ -7,7 +7,7 @@ part of 'selected_program_content.dart';
 // **************************************************************************
 
 String _$selectedProgramContentHash() =>
-    r'0a260be772daeace08189cd5f966e64a205d9c68';
+    r'eef86268afffe210f50175dc5712621f7486b9dc';
 
 /// See also [selectedProgramContent].
 @ProviderFor(selectedProgramContent)
@@ -22,6 +22,8 @@ final selectedProgramContentProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef SelectedProgramContentRef = AutoDisposeFutureProviderRef<XmlTv>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

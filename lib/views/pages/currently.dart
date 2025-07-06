@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tv_program/models/xml_tv.dart';
-import 'package:tv_program/providers/program_provider.dart';
 import 'package:tv_program/providers/selected_program.dart';
 import 'package:tv_program/providers/selected_program_content.dart';
 import 'package:tv_program/services/service.dart';
@@ -34,8 +33,6 @@ class CurrentlyPage extends ConsumerWidget {
       ),
       bottomNavigationBar: Builder(
         builder: (context) {
-          final francePrograms = ref.watch(programProvider(TvService.tvFrance));
-          final allPrograms = ref.watch(programProvider(TvService.allChannels));
           return BottomNavigationBar(
             items: [
               BottomNavigationBarItem(
@@ -46,22 +43,14 @@ class CurrentlyPage extends ConsumerWidget {
                 label: 'TNT',
               ),
               BottomNavigationBarItem(
-                icon: francePrograms.when(
-                  data: (_) => Image.asset(
-                    'assets/images/FRANCE_FLAG.png',
-                    width: selectedProgram == TvService.tvFrance ? 48 : 24,
-                  ),
-                  error: (error, stackTrace) => const Icon(Icons.error),
-                  loading: () => const CircularProgressIndicator(),
+                icon: Image.asset(
+                  'assets/images/FRANCE_FLAG.png',
+                  width: selectedProgram == TvService.tvFrance ? 48 : 24,
                 ),
                 label: 'France',
               ),
               BottomNavigationBarItem(
-                icon: allPrograms.when(
-                  data: (_) => const Icon(Icons.tv),
-                  error: (error, stackTrace) => const Icon(Icons.error),
-                  loading: () => const CircularProgressIndicator(),
-                ),
+                icon: const Icon(Icons.tv),
                 label: 'Tout',
               ),
             ],
@@ -80,17 +69,11 @@ class CurrentlyPage extends ConsumerWidget {
                       .select(TvService.tvTnt);
                   break;
                 case 1:
-                  if (francePrograms.isLoading) {
-                    return;
-                  }
                   ref
                       .read(selectedProgramProvider.notifier)
                       .select(TvService.tvFrance);
                   break;
                 case 2:
-                  if (allPrograms.isLoading) {
-                    return;
-                  }
                   ref
                       .read(selectedProgramProvider.notifier)
                       .select(TvService.allChannels);
@@ -103,7 +86,7 @@ class CurrentlyPage extends ConsumerWidget {
     );
   }
 
-  _indexOf(String selectedProgram) {
+  int _indexOf(String selectedProgram) {
     switch (selectedProgram) {
       case TvService.tvTnt:
         return 0;
