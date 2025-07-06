@@ -89,10 +89,10 @@ class Program {
 
   String get header => '$startTime - $endTime: $title';
 
-  get duration =>
+  Duration get duration =>
       stop != null && start != null ? stop!.difference(start!) : Duration.zero;
 
-  get shortDescription => description != null && description!.length > 100
+  String? get shortDescription => description != null && description!.length > 100
       ? '${description!.substring(0, 100)}...'
       : description;
 }
