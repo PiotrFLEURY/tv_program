@@ -9,7 +9,11 @@ void main() {
 
     final parser = XmlTvParser();
 
-    final xmlTv = parser.parse(xml);
+    // Same date as in the XML file
+    // 20240803
+    final from = DateTime(2024, 8, 3);
+
+    final xmlTv = parser.parse(xml, from: from);
     expect(xmlTv.channels, isNotEmpty);
     expect(xmlTv.programs, isNotEmpty);
   });
