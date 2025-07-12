@@ -16,7 +16,7 @@ class XmlTvParser {
     return xmlSource.replaceAll('<p>', '').replaceAll('</p>', '');
   }
 
-  XmlTv parse(String xmlSource) {
+  XmlTv parse(String xmlSource, {DateTime? from}) {
     debugPrint('Parsing XML');
     final document = XmlDocument.parse(cleanup(xmlSource));
 
@@ -25,7 +25,7 @@ class XmlTvParser {
       return parseChannel(element);
     }).toList();
 
-    final now = DateTime.now();
+    final now = from ?? DateTime.now();
     final year = now.year;
     final month = now.month.toString().padLeft(2, '0');
     final day = now.day.toString().padLeft(2, '0');
@@ -39,7 +39,7 @@ class XmlTvParser {
           return start?.startsWith(today) ?? false;
         })
         .map((element) {
-          return parseProgram(element);
+          return parseProgram(element, from: from);
         })
         .where((element) => element != null)
         .map((e) => e!)
@@ -64,7 +64,7 @@ class XmlTvParser {
     return Channel(id: id, name: displayName, icon: unescape(icon));
   }
 
-  Program? parseProgram(XmlElement element) {
+  Program? parseProgram(XmlElement element, {DateTime? from}) {
     debugPrint('Parsing program...');
 
     final start = element.getAttribute('start');
@@ -85,7 +85,7 @@ class XmlTvParser {
     final startTime =
         start != null ? format.parse(reworkDateString(start)) : null;
     final stopTime = stop != null ? format.parse(reworkDateString(stop)) : null;
-    final now = DateTime.now();
+    final now = from ?? DateTime.now();
     if (startTime != null &&
             startTime.isBefore(now) &&
             stopTime != null &&
