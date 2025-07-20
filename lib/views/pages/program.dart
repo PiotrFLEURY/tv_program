@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tv_program/models/xml_tv.dart';
+import 'package:tv_program/models/program.dart';
 import 'package:tv_program/views/widgets/safe_image.dart';
 
 class ProgramPage extends StatelessWidget {
@@ -23,8 +23,12 @@ class ProgramPage extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Hero(
                   tag: '${program.startTime}${program.icon}',
-                  child: SafeImage(
-                    url: program.icon,
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 250,
+                    child: SafeImage(
+                      url: program.icon,
+                    ),
                   ),
                 ),
               ),

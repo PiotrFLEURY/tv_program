@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class SafeImage extends StatelessWidget {
   const SafeImage({
@@ -22,9 +23,10 @@ class SafeImage extends StatelessWidget {
               size: size,
             ),
           )
-        : Icon(
-            Icons.image_not_supported_outlined,
-            size: size != null ? size! / 2 : 24,
+        : SvgPicture.asset(
+            'assets/images/nologo.svg',
+            width: size != null ? size! / 2 : 24,
+            height: size != null ? size! / 2 : 24,
           );
   }
 }

@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'program_provider.dart';
+part of 'current_program_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$programHash() => r'2bf735e3bbefaae0f3c70f9309d65741b551f0c4';
+String _$currentProgramHash() => r'f7edefa6554958ee189355fbc937f21cb9ea0d01';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,30 +29,30 @@ class _SystemHash {
   }
 }
 
-/// See also [program].
-@ProviderFor(program)
-const programProvider = ProgramFamily();
+/// See also [currentProgram].
+@ProviderFor(currentProgram)
+const currentProgramProvider = CurrentProgramFamily();
 
-/// See also [program].
-class ProgramFamily extends Family<AsyncValue<XmlTv>> {
-  /// See also [program].
-  const ProgramFamily();
+/// See also [currentProgram].
+class CurrentProgramFamily extends Family<AsyncValue<Program>> {
+  /// See also [currentProgram].
+  const CurrentProgramFamily();
 
-  /// See also [program].
-  ProgramProvider call(
-    String selectedProgram,
+  /// See also [currentProgram].
+  CurrentProgramProvider call(
+    String channelId,
   ) {
-    return ProgramProvider(
-      selectedProgram,
+    return CurrentProgramProvider(
+      channelId,
     );
   }
 
   @override
-  ProgramProvider getProviderOverride(
-    covariant ProgramProvider provider,
+  CurrentProgramProvider getProviderOverride(
+    covariant CurrentProgramProvider provider,
   ) {
     return call(
-      provider.selectedProgram,
+      provider.channelId,
     );
   }
 
@@ -68,74 +68,75 @@ class ProgramFamily extends Family<AsyncValue<XmlTv>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'programProvider';
+  String? get name => r'currentProgramProvider';
 }
 
-/// See also [program].
-class ProgramProvider extends AutoDisposeFutureProvider<XmlTv> {
-  /// See also [program].
-  ProgramProvider(
-    String selectedProgram,
+/// See also [currentProgram].
+class CurrentProgramProvider extends AutoDisposeFutureProvider<Program> {
+  /// See also [currentProgram].
+  CurrentProgramProvider(
+    String channelId,
   ) : this._internal(
-          (ref) => program(
-            ref as ProgramRef,
-            selectedProgram,
+          (ref) => currentProgram(
+            ref as CurrentProgramRef,
+            channelId,
           ),
-          from: programProvider,
-          name: r'programProvider',
+          from: currentProgramProvider,
+          name: r'currentProgramProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$programHash,
-          dependencies: ProgramFamily._dependencies,
-          allTransitiveDependencies: ProgramFamily._allTransitiveDependencies,
-          selectedProgram: selectedProgram,
+                  : _$currentProgramHash,
+          dependencies: CurrentProgramFamily._dependencies,
+          allTransitiveDependencies:
+              CurrentProgramFamily._allTransitiveDependencies,
+          channelId: channelId,
         );
 
-  ProgramProvider._internal(
+  CurrentProgramProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.selectedProgram,
+    required this.channelId,
   }) : super.internal();
 
-  final String selectedProgram;
+  final String channelId;
 
   @override
   Override overrideWith(
-    FutureOr<XmlTv> Function(ProgramRef provider) create,
+    FutureOr<Program> Function(CurrentProgramRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: ProgramProvider._internal(
-        (ref) => create(ref as ProgramRef),
+      override: CurrentProgramProvider._internal(
+        (ref) => create(ref as CurrentProgramRef),
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        selectedProgram: selectedProgram,
+        channelId: channelId,
       ),
     );
   }
 
   @override
-  AutoDisposeFutureProviderElement<XmlTv> createElement() {
-    return _ProgramProviderElement(this);
+  AutoDisposeFutureProviderElement<Program> createElement() {
+    return _CurrentProgramProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is ProgramProvider && other.selectedProgram == selectedProgram;
+    return other is CurrentProgramProvider && other.channelId == channelId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, selectedProgram.hashCode);
+    hash = _SystemHash.combine(hash, channelId.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -143,17 +144,17 @@ class ProgramProvider extends AutoDisposeFutureProvider<XmlTv> {
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin ProgramRef on AutoDisposeFutureProviderRef<XmlTv> {
-  /// The parameter `selectedProgram` of this provider.
-  String get selectedProgram;
+mixin CurrentProgramRef on AutoDisposeFutureProviderRef<Program> {
+  /// The parameter `channelId` of this provider.
+  String get channelId;
 }
 
-class _ProgramProviderElement extends AutoDisposeFutureProviderElement<XmlTv>
-    with ProgramRef {
-  _ProgramProviderElement(super.provider);
+class _CurrentProgramProviderElement
+    extends AutoDisposeFutureProviderElement<Program> with CurrentProgramRef {
+  _CurrentProgramProviderElement(super.provider);
 
   @override
-  String get selectedProgram => (origin as ProgramProvider).selectedProgram;
+  String get channelId => (origin as CurrentProgramProvider).channelId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

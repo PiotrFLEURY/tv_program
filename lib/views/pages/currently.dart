@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tv_program/models/xml_tv.dart';
+import 'package:tv_program/models/channel.dart';
+import 'package:tv_program/models/selected_program.dart';
+import 'package:tv_program/providers/channels_provider.dart';
+import 'package:tv_program/providers/current_program_provider.dart';
 import 'package:tv_program/providers/selected_program.dart';
-import 'package:tv_program/providers/selected_program_content.dart';
-import 'package:tv_program/services/service.dart';
+import 'package:tv_program/providers/tonight_program_provider.dart';
 import 'package:tv_program/views/widgets/safe_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,10 +15,10 @@ class CurrentlyPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedProgram = ref.watch(selectedProgramProvider);
-    final program = ref.watch(selectedProgramContentProvider);
+    final channels = ref.watch(channelsProvider);
     return Scaffold(
-      body: program.when(
-        data: (tvProgram) => ChannelList(tvProgram: tvProgram),
+      body: channels.when(
+        data: (channelList) => ChannelList(channels: channelList),
         loading: () => const Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -38,19 +40,19 @@ class CurrentlyPage extends ConsumerWidget {
               BottomNavigationBarItem(
                 icon: Image.asset(
                   'assets/images/Logo_TNT_HD.jpg',
-                  width: selectedProgram == TvService.tvTnt ? 48 : 24,
+                  width: selectedProgram == SelectedProgramEnum.tnt ? 48 : 24,
                 ),
                 label: 'TNT',
               ),
               BottomNavigationBarItem(
                 icon: Image.asset(
                   'assets/images/FRANCE_FLAG.png',
-                  width: selectedProgram == TvService.tvFrance ? 48 : 24,
+                  width: selectedProgram == SelectedProgramEnum.fr ? 48 : 24,
                 ),
                 label: 'France',
               ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.tv),
+              const BottomNavigationBarItem(
+                icon: Icon(Icons.tv),
                 label: 'Tout',
               ),
             ],
@@ -66,17 +68,17 @@ class CurrentlyPage extends ConsumerWidget {
                 case 0:
                   ref
                       .read(selectedProgramProvider.notifier)
-                      .select(TvService.tvTnt);
+                      .select(SelectedProgramEnum.tnt);
                   break;
                 case 1:
                   ref
                       .read(selectedProgramProvider.notifier)
-                      .select(TvService.tvFrance);
+                      .select(SelectedProgramEnum.fr);
                   break;
                 case 2:
                   ref
                       .read(selectedProgramProvider.notifier)
-                      .select(TvService.allChannels);
+                      .select(SelectedProgramEnum.all);
                   break;
               }
             },
@@ -86,29 +88,28 @@ class CurrentlyPage extends ConsumerWidget {
     );
   }
 
-  int _indexOf(String selectedProgram) {
+  int _indexOf(SelectedProgramEnum selectedProgram) {
     switch (selectedProgram) {
-      case TvService.tvTnt:
+      case SelectedProgramEnum.tnt:
         return 0;
-      case TvService.tvFrance:
+      case SelectedProgramEnum.fr:
         return 1;
-      case TvService.allChannels:
+      case SelectedProgramEnum.all:
         return 2;
     }
-    return 0;
   }
 }
 
-class ChannelList extends StatefulWidget {
+class ChannelList extends ConsumerStatefulWidget {
   const ChannelList({
     super.key,
-    required this.tvProgram,
+    required this.channels,
   });
 
-  final XmlTv tvProgram;
+  final List<Channel> channels;
 
   @override
-  State<ChannelList> createState() => _ChannelListState();
+  ConsumerState<ChannelList> createState() => _ChannelListState();
 }
 
 enum PreviewMode {
@@ -116,7 +117,7 @@ enum PreviewMode {
   tonight,
 }
 
-class _ChannelListState extends State<ChannelList>
+class _ChannelListState extends ConsumerState<ChannelList>
     with SingleTickerProviderStateMixin {
   static const _kFavoritesKey = 'favorites';
   static const _kShowFavoritesKey = 'showFavorites';
@@ -130,13 +131,13 @@ class _ChannelListState extends State<ChannelList>
   void _onFilterChanged(String filter) {
     setState(() {
       if (filter.isEmpty && _showFavorites) {
-        _filteredChannels = widget.tvProgram.channelsWithData
+        _filteredChannels = widget.channels
             .where(
               (channel) => _favoriteChannelNames.contains(channel.id),
             )
             .toList();
       } else {
-        _filteredChannels = widget.tvProgram.channelsWithData
+        _filteredChannels = widget.channels
             .where(
               (channel) =>
                   channel.id!.toLowerCase().contains(filter.toLowerCase()),
@@ -149,7 +150,7 @@ class _ChannelListState extends State<ChannelList>
   @override
   void initState() {
     super.initState();
-    _filteredChannels = widget.tvProgram.channels;
+    _filteredChannels = widget.channels;
     _initFavorites();
   }
 
@@ -286,74 +287,123 @@ class _ChannelListState extends State<ChannelList>
         ),
       );
     }
-    return ListView.builder(
-      itemCount: _filteredChannels.length,
-      itemBuilder: (context, index) {
-        final channel = _filteredChannels[index];
-        final preview = previewMode == PreviewMode.currently
-            ? widget.tvProgram.currentlyOn(channel)
-            : widget.tvProgram.tonightOn(channel);
-        return InkWell(
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              '/channel',
-              arguments: (channel, widget.tvProgram.todaysOn(channel)),
-            );
-          },
-          child: Column(
-            children: [
-              ListTile(
-                leading: Hero(
-                  tag: channel.icon!,
-                  child: SafeImage(
-                    url: channel.icon,
-                    size: 50,
-                  ),
-                ),
-                subtitle: Container(
-                  height: 1,
-                  color: Colors.grey[300],
-                ),
-                trailing: _showFavorites
-                    ? null
-                    : IconButton(
-                        tooltip: _favoriteChannelNames.contains(channel.id)
-                            ? 'Retirer ${channel.name} des favoris'
-                            : 'Ajouter ${channel.name} aux favoris',
-                        icon: Icon(
-                          _favoriteChannelNames.contains(channel.id)
-                              ? Icons.star
-                              : Icons.star_border,
-                          color: _favoriteChannelNames.contains(channel.id)
-                              ? Colors.yellow[800]
-                              : Colors.grey,
-                        ),
-                        onPressed: () => _toggleFavorite(channel),
-                      ),
+    return Container(
+      color: Colors.grey[100],
+      child: ListView.builder(
+        itemCount: _filteredChannels.length,
+        itemBuilder: (context, index) {
+          final channel = _filteredChannels[index];
+          final preview = previewMode == PreviewMode.currently
+              ? ref.watch(currentProgramProvider(channel.id!))
+              : ref.watch(tonightProgramProvider(channel.id!));
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8.0),
               ),
-              if (preview != null)
-                Container(
-                  color: Colors.grey[100],
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: ListTile(
-                      leading: SafeImage(
-                        url: preview.icon,
-                        size: 100,
+              clipBehavior: Clip.antiAlias,
+              child: InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, '/channel', arguments: channel);
+                },
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: SizedBox(
+                        width: 96,
+                        child: Row(
+                          spacing: 4.0,
+                          children: [
+                            acromTNTChannelOrdering[channel.id] != null
+                                ? Text(
+                                    '${acromTNTChannelOrdering[channel.id]!}.',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  )
+                                : const SizedBox(
+                                    width: 24,
+                                  ), // Placeholder for alignment
+                            Hero(
+                              tag: channel.icon!,
+                              child: SafeImage(
+                                url: channel.icon,
+                                size: 50,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      title: Text(preview.header),
-                      subtitle: Text(
-                        preview.description ?? '',
-                        overflow: TextOverflow.ellipsis,
+                      subtitle: Container(
+                        height: 1,
+                        color: Colors.grey[300],
+                      ),
+                      trailing: _showFavorites
+                          ? null
+                          : IconButton(
+                              tooltip:
+                                  _favoriteChannelNames.contains(channel.id)
+                                      ? 'Retirer ${channel.name} des favoris'
+                                      : 'Ajouter ${channel.name} aux favoris',
+                              icon: Icon(
+                                _favoriteChannelNames.contains(channel.id)
+                                    ? Icons.star
+                                    : Icons.star_border,
+                                color:
+                                    _favoriteChannelNames.contains(channel.id)
+                                        ? Colors.yellow[800]
+                                        : Colors.grey,
+                              ),
+                              onPressed: () => _toggleFavorite(channel),
+                            ),
+                    ),
+                    preview.when(
+                      data: (program) {
+                        if (program == null) {
+                          return ListTile(
+                            title: Text('Aucun programme disponible'),
+                            subtitle: Text('Pour ${channel.name}'),
+                          );
+                        }
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: ListTile(
+                            leading: SafeImage(
+                              url: program.icon,
+                              size: 100,
+                            ),
+                            title: Text(program.header),
+                            subtitle: Text(
+                              program.description ?? '',
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        );
+                      },
+                      loading: () => const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: SizedBox(),
+                      ),
+                      error: (error, stackTrace) => Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Center(
+                          child: Text(
+                            'Oups, quelque chose a mal tourné 🦄',
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-            ],
-          ),
-        );
-      },
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }
