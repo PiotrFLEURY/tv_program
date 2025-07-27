@@ -72,8 +72,8 @@ class TvProgApi {
   Program _programFromJson(Map<String, dynamic> program) {
     return Program(
       channelId: program['channelId'] as String?,
-      start: DateTime.parse(program['startTime'] as String),
-      stop: DateTime.parse(program['endTime'] as String),
+      start: DateTime.parse(program['startTime'] as String).toUtc(),
+      stop: DateTime.parse(program['endTime'] as String).toUtc(),
       title: program['title'] as String?,
       description: program['description'] as String?,
       icon: program['iconUrl'] as String?,

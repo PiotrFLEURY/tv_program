@@ -1,5 +1,8 @@
+import 'package:intl/intl.dart';
 import 'package:tv_program/models/credit.dart';
 import 'package:tv_program/models/rating.dart';
+
+final hourDisplayFormat = DateFormat('HH:mm', 'fr_FR');
 
 class Program {
   final String? channelId;
@@ -26,11 +29,9 @@ class Program {
     required this.episodeNum,
   });
 
-  String get startTime =>
-      '${start!.hour.toString().padLeft(2, '0')}:${start!.minute.toString().padLeft(2, '0')}';
+  String get startTime => hourDisplayFormat.format(start!.toLocal());
 
-  String get endTime =>
-      '${stop!.hour.toString().padLeft(2, '0')}:${stop!.minute.toString().padLeft(2, '0')}';
+  String get endTime => hourDisplayFormat.format(stop!.toLocal());
 
   String get header => '$startTime - $endTime: $title';
 
