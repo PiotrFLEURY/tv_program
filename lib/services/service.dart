@@ -4,19 +4,20 @@ import 'package:tv_program/models/channel.dart';
 import 'package:tv_program/models/program.dart';
 
 class TvProgCache {
-  final List<Channel> _channelsCache = [];
+  final Map<String, List<Channel>> _channelsCache = {};
   final Map<String, List<Program>> _programsCache = {};
   final Map<String, Program?> _currentProgramCache = {};
   final Map<String, Program?> _tonightProgramCache = {};
 
-  List<Channel> get channels => _channelsCache;
+  List<Channel> getChannels(String package) => _channelsCache[package] ?? [];
   List<Program>? getPrograms(String channelId) => _programsCache[channelId];
   Program? getCurrentProgram(String channelId) =>
       _currentProgramCache[channelId];
   Program? getTonightProgram(String channelId) =>
       _tonightProgramCache[channelId];
 
-  void addChannels(List<Channel> channels) => _channelsCache.addAll(channels);
+  void addChannels(String package, List<Channel> channels) =>
+      _channelsCache[package] = channels;
   void addPrograms(String channelId, List<Program> programs) {
     _programsCache[channelId] = programs;
   }
@@ -39,13 +40,13 @@ class TvService {
   Future<List<Channel>> getChannels(String selectedProgram) async {
     debugPrint('Getting TV channels $selectedProgram');
 
-    if (cache.channels.isNotEmpty) {
+    if (cache.getChannels(selectedProgram).isNotEmpty) {
       debugPrint('Returning cached channels');
-      return cache.channels;
+      return cache.getChannels(selectedProgram);
     }
 
     var channels = await api.fetchChannels(selectedProgram);
-    cache.addChannels(channels);
+    cache.addChannels(selectedProgram, channels);
     return channels;
   }
 
