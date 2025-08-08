@@ -6,7 +6,7 @@ part of 'service_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$tvServiceHash() => r'2b8989bed90cfc07c0f590f6289d21d810853bd7';
+String _$tvServiceHash() => r'6d5ba0f1da0c19f76f3d1d6e6d1c5d79785080dc';
 
 /// See also [tvService].
 @ProviderFor(tvService)

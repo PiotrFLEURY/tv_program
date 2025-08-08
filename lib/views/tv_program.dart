@@ -6,6 +6,8 @@ import 'package:tv_program/models/program.dart';
 import 'package:tv_program/views/pages/channel.dart';
 import 'package:tv_program/views/pages/currently.dart';
 import 'package:tv_program/views/pages/program.dart';
+import 'package:tv_program/views/pages/v2/home.dart';
+import 'package:tv_program/views/pages/v2/program_list.dart';
 
 class TvProgram extends StatelessWidget {
   const TvProgram({super.key, required this.packageInfo});
@@ -18,8 +20,19 @@ class TvProgram extends StatelessWidget {
       debugShowCheckedModeBanner: kDebugMode,
       showSemanticsDebugger: false,
       title: 'TV Program',
-      initialRoute: '/currently',
+      initialRoute: '/',
       routes: {
+        '/': (context) => const HomePage(),
+        '/program_list': (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as (
+            Channel,
+            DateTime?
+          );
+          final Channel channel = args.$1;
+          final DateTime? target = args.$2;
+
+          return ProgramList(channel: channel, target: target);
+        },
         '/currently': (context) => const CurrentlyPage(),
         '/channel': (context) {
           final args = ModalRoute.of(context)!.settings.arguments as Channel;

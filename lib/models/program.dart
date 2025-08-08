@@ -31,6 +31,9 @@ class Program {
 
   String get startTime => hourDisplayFormat.format(start!.toLocal());
 
+  String get startDayAndMonth =>
+      DateFormat('dd MMM', 'fr_FR').format(start!.toLocal());
+
   String get endTime => hourDisplayFormat.format(stop!.toLocal());
 
   String get header => '$startTime - $endTime: $title';
