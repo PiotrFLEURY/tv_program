@@ -6,10 +6,9 @@ import 'package:tv_program/providers/channels_provider.dart';
 import 'package:tv_program/providers/current_program_provider.dart';
 import 'package:tv_program/providers/selected_program.dart';
 import 'package:tv_program/providers/tonight_program_provider.dart';
-import 'package:tv_program/views/tv_program.dart';
+import 'package:tv_program/views/widgets/drawer.dart';
 import 'package:tv_program/views/widgets/safe_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class CurrentlyPage extends ConsumerWidget {
   const CurrentlyPage({super.key});
@@ -19,34 +18,7 @@ class CurrentlyPage extends ConsumerWidget {
     final selectedProgram = ref.watch(selectedProgramProvider);
     final channels = ref.watch(channelsProvider);
     return Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              child: Image.asset('assets/icons/Presentation.png'),
-            ),
-            ListTile(
-              leading: const Icon(Icons.info),
-              title: const Text('À propos'),
-              onTap: () => _showAboutDialog(context),
-            ),
-            ListTile(
-              leading: const Icon(Icons.mail),
-              title: const Text('Me contacter'),
-              subtitle: const Text('piotr.fleury@gmail.com'),
-              onTap: () =>
-                  launchUrl(Uri.parse('mailto:piotr.fleury@gmail.com')),
-            ),
-            ListTile(
-              leading: const Icon(Icons.web),
-              title: const Text('Mon site web'),
-              subtitle: const Text('https://mobile-tools.dev'),
-              onTap: () => launchUrl(Uri.parse('https://mobile-tools.dev')),
-            ),
-          ],
-        ),
-      ),
+      drawer: const TvProgDrawer(),
       appBar: AppBar(
         title: const Text('Programmes TV'),
         centerTitle: true,
@@ -131,30 +103,6 @@ class CurrentlyPage extends ConsumerWidget {
       case SelectedProgramEnum.all:
         return 2;
     }
-  }
-
-  void _showAboutDialog(BuildContext context) {
-    final packageInfo =
-        context.findAncestorWidgetOfExactType<TvProgram>()?.packageInfo;
-    showAboutDialog(
-      context: context,
-      applicationName: 'TV Prog',
-      applicationVersion: 'Version ${packageInfo!.version}',
-      applicationIcon: Image.asset(
-        'assets/icons/icon_android.png',
-        width: 48,
-      ),
-      applicationLegalese: '© ${DateTime.now().year} Piotr Fleury',
-      children: [
-        const Text(
-          'TV Prog est une application open source pour consulter les programmes TV sans aucune publicité.',
-        ),
-        const SizedBox(height: 16),
-        Text(
-          'Développée par Piotr Fleury, cette application utilise les données de l\'API xmltvfr.fr.',
-        ),
-      ],
-    );
   }
 }
 

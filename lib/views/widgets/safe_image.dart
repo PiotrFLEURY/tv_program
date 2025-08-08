@@ -22,6 +22,7 @@ class SafeImage extends StatelessWidget {
               Icons.broken_image_outlined,
               size: size,
             ),
+            fit: BoxFit.cover,
           )
         : SvgPicture.asset(
             'assets/images/nologo.svg',
