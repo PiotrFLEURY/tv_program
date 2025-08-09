@@ -29,6 +29,13 @@ class TvProgCache {
   void addTonightProgram(String channelId, Program? program) {
     _tonightProgramCache[channelId] = program;
   }
+
+  void clearCache() {
+    _channelsCache.clear();
+    _programsCache.clear();
+    _currentProgramCache.clear();
+    _tonightProgramCache.clear();
+  }
 }
 
 class TvService {

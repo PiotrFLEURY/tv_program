@@ -23,16 +23,17 @@ class ProgramItem extends ConsumerWidget {
       decoration: BoxDecoration(
         color: Colors.white.withAlpha(50),
         borderRadius: BorderRadius.circular(8),
-        image: showChannelIcon
-            ? DecorationImage(
-                image: NetworkImage(program.icon ?? ''),
-                fit: BoxFit.cover,
-                colorFilter: ColorFilter.mode(
-                  Colors.black.withAlpha(100),
-                  BlendMode.darken,
-                ),
-              )
-            : null,
+        image:
+            showChannelIcon && program.icon != null && program.icon!.isNotEmpty
+                ? DecorationImage(
+                    image: NetworkImage(program.icon ?? ''),
+                    fit: BoxFit.cover,
+                    colorFilter: ColorFilter.mode(
+                      Colors.black.withAlpha(100),
+                      BlendMode.darken,
+                    ),
+                  )
+                : null,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,

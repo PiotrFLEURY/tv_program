@@ -23,10 +23,12 @@ class TonightCarrousel extends ConsumerWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
-              image: DecorationImage(
-                image: NetworkImage(program.icon ?? ''),
-                fit: BoxFit.cover,
-              ),
+              image: program.icon != null && program.icon!.isNotEmpty
+                  ? DecorationImage(
+                      image: NetworkImage(program.icon!),
+                      fit: BoxFit.cover,
+                    )
+                  : null,
             ),
             child: Align(
               alignment: Alignment.bottomCenter,
