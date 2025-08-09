@@ -54,12 +54,10 @@ class HomePage extends ConsumerWidget {
       ),
       body: Stack(
         children: [
-          Expanded(
-            child: channels.when(
-              data: (channelsData) => HomeList(channels: channelsData),
-              loading: () => HomeList(channels: []),
-              error: (error, stack) => HomeList(channels: []),
-            ),
+          channels.when(
+            data: (channelsData) => HomeList(channels: channelsData),
+            loading: () => HomeList(channels: []),
+            error: (error, stack) => HomeList(channels: []),
           ),
           Align(
             alignment: Alignment.bottomCenter,

@@ -7,7 +7,7 @@ part of 'random_tonight_program_provider.dart';
 // **************************************************************************
 
 String _$randomTonightProgramHash() =>
-    r'e503a590df49d0f4b27401addd6e5d9722b33e1c';
+    r'5f187a16e379af0cad038c9b1946e45e90b87e7c';
 
 /// See also [RandomTonightProgram].
 @ProviderFor(RandomTonightProgram)
