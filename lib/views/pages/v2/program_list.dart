@@ -4,11 +4,14 @@ import 'package:tv_program/models/channel.dart';
 import 'package:tv_program/models/program.dart';
 import 'package:tv_program/providers/channel_programs_provider.dart';
 import 'package:tv_program/views/colors.dart';
+import 'package:tv_program/views/pages/v2/program_detail.dart';
 import 'package:tv_program/views/pages/v2/widgets/program_item.dart';
 import 'package:tv_program/views/widgets/safe_image.dart';
 
 class ProgramList extends ConsumerStatefulWidget {
   const ProgramList({super.key, required this.channel, this.target});
+
+  static const routeName = '/program_list';
 
   final Channel channel;
   final DateTime? target;
@@ -47,6 +50,13 @@ class _ProgramListState extends ConsumerState<ProgramList> {
       backgroundColor: TvProgTheme.backgroundColor,
       appBar: AppBar(
         backgroundColor: TvProgTheme.backgroundColor,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: TvProgTheme.greyLight,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: Text(
           'Programmes de ${widget.channel.name}',
           style: TextStyle(
@@ -107,10 +117,31 @@ class _ProgramListState extends ConsumerState<ProgramList> {
                           ...programs.map((program) {
                             return Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: ProgramItem(
-                                channel: widget.channel,
-                                program: program,
-                                showChannelIcon: false,
+                              child: Builder(
+                                builder: (context) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      showBottomSheet(
+                                        context: context,
+                                        builder: (context) {
+                                          return ProgramDetail(
+                                            program: program,
+                                          );
+                                        },
+                                      );
+                                      // Navigator.pushNamed(
+                                      //   context,
+                                      //   ProgramDetail.routeName,
+                                      //   arguments: program,
+                                      // );
+                                    },
+                                    child: ProgramItem(
+                                      channel: widget.channel,
+                                      program: program,
+                                      big: false,
+                                    ),
+                                  );
+                                },
                               ),
                             );
                           }),

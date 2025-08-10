@@ -13,6 +13,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class CurrentlyPage extends ConsumerWidget {
   const CurrentlyPage({super.key});
 
+  static const routeName = '/currently';
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedProgram = ref.watch(selectedProgramProvider);
