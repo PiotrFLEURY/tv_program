@@ -18,7 +18,7 @@ class TvProgram extends StatelessWidget {
   const TvProgram({
     super.key,
     required this.packageInfo,
-    this.homePage = '/',
+    this.homePage = HomePage.routeName,
   });
 
   final PackageInfo packageInfo;
