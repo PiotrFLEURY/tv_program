@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tv_program/providers/random_tonight_program_provider.dart';
+import 'package:tv_program/views/colors.dart';
 
 class TonightCarrousel extends ConsumerWidget {
   const TonightCarrousel({super.key});
@@ -69,9 +70,12 @@ class TonightCarrousel extends ConsumerWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         alignment: Alignment.center,
-        child: CircularProgressIndicator(),
+        child: Semantics(
+          label: 'Chargement...',
+          child: CircularProgressIndicator(),
+        ),
       ),
-      error: (error, stack) => const SizedBox(),
+      error: (error, stack) => const SizedBox.shrink(),
     );
   }
 }

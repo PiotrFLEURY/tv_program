@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tv_program/models/program.dart';
 import 'package:tv_program/providers/channels_provider.dart';
-import 'package:tv_program/providers/service_provider.dart';
+import 'package:tv_program/providers/tonight_program_provider.dart';
 
 part 'random_tonight_program_provider.g.dart';
 
@@ -15,10 +15,10 @@ class RandomTonightProgram extends _$RandomTonightProgram {
   }
 
   Future<Program?> _getRandomTonightProgram() async {
-    final tvService = ref.watch(tvServiceProvider);
     final channels = await ref.watch(channelsProvider.future);
     final randomChannel = channels[Random().nextInt(channels.length)];
-    final tonightProgram = await tvService.getTonightProgram(randomChannel.id!);
+    final tonightProgram =
+        await ref.watch(tonightProgramProvider(randomChannel.id!).future);
     return tonightProgram;
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tv_program/providers/channels_provider.dart';
 import 'package:tv_program/views/colors.dart';
+import 'package:tv_program/views/pages/v2/channel_search.dart';
 import 'package:tv_program/views/pages/v2/widgets/home_list.dart';
 import 'package:tv_program/views/pages/v2/widgets/selected_program_selector.dart';
 import 'package:tv_program/views/widgets/drawer.dart';
@@ -36,20 +37,13 @@ class HomePage extends ConsumerWidget {
           ),
         ),
         actions: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: TvProgTheme.greyLight,
-                width: 1,
-              ),
-            ),
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            child: Image.asset(
-              'assets/icons/icon_android.png',
-              height: 48,
-              width: 48,
-            ),
+          Builder(
+            builder: (context) {
+              return IconButton(
+                onPressed: () => _openSearch(context),
+                icon: Icon(Icons.search, color: TvProgTheme.greyLight),
+              );
+            },
           ),
         ],
         backgroundColor: TvProgTheme.backgroundColor,
@@ -70,6 +64,13 @@ class HomePage extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _openSearch(BuildContext context) {
+    Navigator.pushNamed(
+      context,
+      ChannelSearch.routeName,
     );
   }
 }
