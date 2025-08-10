@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tv_program/views/pages/currently.dart';
+import 'package:tv_program/views/pages/v2/home.dart';
 import 'package:tv_program/views/tv_program.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -36,9 +39,15 @@ class TvProgDrawer extends StatelessWidget {
             leading: const Icon(Icons.color_lens_outlined),
             title: const Text('Nouvelle interface'),
             onTap: () {
+              SharedPreferences.getInstance().then((prefs) {
+                prefs.setString(
+                  TvProgPreferences.uiPreferenceKey,
+                  HomePage.routeName,
+                );
+              });
               Navigator.pushReplacementNamed(
                 context,
-                '/',
+                HomePage.routeName,
               );
             },
           ),
@@ -46,9 +55,15 @@ class TvProgDrawer extends StatelessWidget {
             leading: const Icon(Icons.color_lens_outlined),
             title: const Text('Ancienne interface'),
             onTap: () {
+              SharedPreferences.getInstance().then((prefs) {
+                prefs.setString(
+                  TvProgPreferences.uiPreferenceKey,
+                  CurrentlyPage.routeName,
+                );
+              });
               Navigator.pushReplacementNamed(
                 context,
-                '/currently',
+                CurrentlyPage.routeName,
               );
             },
           ),

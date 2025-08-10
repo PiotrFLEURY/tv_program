@@ -5,6 +5,8 @@ import 'package:tv_program/views/widgets/safe_image.dart';
 class ProgramPage extends StatelessWidget {
   const ProgramPage({super.key, required this.program});
 
+  static const routeName = '/program';
+
   final Program program;
 
   @override

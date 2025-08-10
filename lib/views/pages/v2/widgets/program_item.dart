@@ -9,12 +9,12 @@ class ProgramItem extends ConsumerWidget {
     super.key,
     required this.channel,
     required this.program,
-    this.showChannelIcon = true,
+    this.big = true,
   });
 
   final Channel channel;
   final Program program;
-  final bool showChannelIcon;
+  final bool big;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,29 +23,28 @@ class ProgramItem extends ConsumerWidget {
       decoration: BoxDecoration(
         color: Colors.white.withAlpha(50),
         borderRadius: BorderRadius.circular(8),
-        image:
-            showChannelIcon && program.icon != null && program.icon!.isNotEmpty
-                ? DecorationImage(
-                    image: NetworkImage(program.icon ?? ''),
-                    fit: BoxFit.cover,
-                    colorFilter: ColorFilter.mode(
-                      Colors.black.withAlpha(100),
-                      BlendMode.darken,
-                    ),
-                  )
-                : null,
+        image: big && program.icon != null && program.icon!.isNotEmpty
+            ? DecorationImage(
+                image: NetworkImage(program.icon ?? ''),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withAlpha(100),
+                  BlendMode.darken,
+                ),
+              )
+            : null,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment:
-            showChannelIcon ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+            big ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: [
           Container(
             decoration: BoxDecoration(
               color: Colors.white.withAlpha(120),
             ),
             child: SafeImage(
-              url: showChannelIcon ? channel.icon : program.icon ?? '',
+              url: big ? channel.icon : program.icon ?? '',
               size: 96,
             ),
           ),
@@ -57,9 +56,9 @@ class ProgramItem extends ConsumerWidget {
               overflow: TextOverflow.ellipsis,
               softWrap: true,
               textAlign: TextAlign.start,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
-                fontSize: 24,
+                fontSize: big ? 24 : 16,
                 fontWeight: FontWeight.w600,
               ),
             ),

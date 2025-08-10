@@ -9,6 +9,8 @@ import 'package:tv_program/views/widgets/drawer.dart';
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
+  static const routeName = '/home';
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final channels = ref.watch(channelsProvider);

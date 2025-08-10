@@ -12,6 +12,8 @@ class ChannelPage extends ConsumerWidget {
     required this.channel,
   });
 
+  static const routeName = '/channel';
+
   final Channel channel;
 
   @override
