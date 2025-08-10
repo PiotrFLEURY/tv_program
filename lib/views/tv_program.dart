@@ -6,6 +6,7 @@ import 'package:tv_program/models/program.dart';
 import 'package:tv_program/views/pages/channel.dart';
 import 'package:tv_program/views/pages/currently.dart';
 import 'package:tv_program/views/pages/program.dart';
+import 'package:tv_program/views/pages/v2/channel_search.dart';
 import 'package:tv_program/views/pages/v2/home.dart';
 import 'package:tv_program/views/pages/v2/program_list.dart';
 import 'package:tv_program/views/pages/v2/program_detail.dart';
@@ -34,20 +35,16 @@ class TvProgram extends StatelessWidget {
       routes: {
         HomePage.routeName: (context) => const HomePage(),
         ProgramList.routeName: (context) {
-          final args = ModalRoute.of(context)!.settings.arguments as (
-            Channel,
-            DateTime?
-          );
-          final Channel channel = args.$1;
-          final DateTime? target = args.$2;
+          final channel = ModalRoute.of(context)!.settings.arguments as Channel;
 
-          return ProgramList(channel: channel, target: target);
+          return ProgramList(channel: channel);
         },
         ProgramDetail.routeName: (context) {
           final Program program =
               ModalRoute.of(context)!.settings.arguments as Program;
           return ProgramDetail(program: program);
         },
+        ChannelSearch.routeName: (context) => const ChannelSearch(),
         CurrentlyPage.routeName: (context) => const CurrentlyPage(),
         ChannelPage.routeName: (context) {
           final args = ModalRoute.of(context)!.settings.arguments as Channel;

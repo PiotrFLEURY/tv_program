@@ -19,17 +19,19 @@ class SelectedProgramSelector extends ConsumerWidget {
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: SelectedProgramEnum.values.map((program) {
-            return GestureDetector(
-              onTap: () {
-                ref.read(selectedProgramProvider.notifier).select(program);
-              },
-              child: SelectedProgramItem(
-                selected: selectedProgram == program,
-                label: program.name,
-              ),
-            );
-          }).toList(),
+          children: SelectedProgramEnum.values.map(
+            (program) {
+              return GestureDetector(
+                onTap: () {
+                  ref.read(selectedProgramProvider.notifier).select(program);
+                },
+                child: SelectedProgramItem(
+                  selected: selectedProgram == program,
+                  label: program.name,
+                ),
+              );
+            },
+          ).toList(),
         ),
       ),
     );

@@ -8,44 +8,16 @@ import 'package:tv_program/views/pages/v2/program_detail.dart';
 import 'package:tv_program/views/pages/v2/widgets/program_item.dart';
 import 'package:tv_program/views/widgets/safe_image.dart';
 
-class ProgramList extends ConsumerStatefulWidget {
-  const ProgramList({super.key, required this.channel, this.target});
+class ProgramList extends ConsumerWidget {
+  const ProgramList({super.key, required this.channel});
 
   static const routeName = '/program_list';
 
   final Channel channel;
-  final DateTime? target;
 
   @override
-  ConsumerState<ProgramList> createState() => _ProgramListState();
-}
-
-class _ProgramListState extends ConsumerState<ProgramList> {
-  final ScrollController scrollController = ScrollController();
-
-  void _scrollToTarget(List<Program> programs) {
-    if (widget.target != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        final index = programs.indexWhere(
-          (program) => program.start!.isAtSameMomentAs(widget.target!),
-        );
-        if (index != -1) {
-          final offset = index * 100.0; // Assuming each item is 100px tall
-          final duration = const Duration(milliseconds: 300);
-          final curve = Curves.easeInOut;
-          scrollController.animateTo(
-            offset,
-            duration: duration,
-            curve: curve,
-          ); // Assuming each item is 100px tall
-        }
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final programs = ref.watch(channelProgramsProvider(widget.channel.id!));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final programs = ref.watch(channelProgramsProvider(channel.id!));
     return Scaffold(
       backgroundColor: TvProgTheme.backgroundColor,
       appBar: AppBar(
@@ -58,7 +30,7 @@ class _ProgramListState extends ConsumerState<ProgramList> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          'Programmes de ${widget.channel.name}',
+          'Programmes de ${channel.name}',
           style: TextStyle(
             color: TvProgTheme.greyLight,
             fontSize: 18,
@@ -69,17 +41,13 @@ class _ProgramListState extends ConsumerState<ProgramList> {
           Center(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: SafeImage(url: widget.channel.icon ?? '', size: 48),
+              child: SafeImage(url: channel.icon ?? '', size: 48),
             ),
           ),
         ],
       ),
       body: programs.when(
         data: (programList) {
-          // post-frame callback to scroll to target program
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            _scrollToTarget(programList);
-          });
           final Map<String, List<Program>> daysPrograms =
               programList.fold<Map<String, List<Program>>>(
             {},
@@ -111,7 +79,6 @@ class _ProgramListState extends ConsumerState<ProgramList> {
                   child: TabBarView(
                     children: daysPrograms.values.map((programs) {
                       return ListView(
-                        controller: scrollController,
                         children: [
                           const SizedBox(height: 16.0),
                           ...programs.map((program) {
@@ -136,7 +103,7 @@ class _ProgramListState extends ConsumerState<ProgramList> {
                                       // );
                                     },
                                     child: ProgramItem(
-                                      channel: widget.channel,
+                                      channel: channel,
                                       program: program,
                                       big: false,
                                     ),
