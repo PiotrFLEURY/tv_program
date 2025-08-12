@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tv_program/providers/random_tonight_program_provider.dart';
-import 'package:tv_program/views/colors.dart';
 
 class TonightCarrousel extends ConsumerWidget {
   const TonightCarrousel({super.key});
