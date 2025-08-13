@@ -6,7 +6,7 @@ import 'package:tv_program/providers/service_provider.dart';
 
 part 'channels_provider.g.dart';
 
-Map<String, int> acromTNTChannelOrdering = {
+Map<String, int> arcomTNTChannelOrdering = {
   'TF1.fr': 1,
   'France2.fr': 2,
   'France3.fr': 3,
@@ -41,15 +41,15 @@ Future<List<Channel>> channels(Ref ref) async {
   final tvService = ref.watch(tvServiceProvider);
   final unorderedChannels = await tvService.getChannels(selectedProgram.name);
   final orderedChannels = unorderedChannels
-      .where((channel) => acromTNTChannelOrdering.containsKey(channel.id))
+      .where((channel) => arcomTNTChannelOrdering.containsKey(channel.id))
       .toList()
     ..sort((a, b) {
-      return acromTNTChannelOrdering[a.id]!
-          .compareTo(acromTNTChannelOrdering[b.id]!);
+      return arcomTNTChannelOrdering[a.id]!
+          .compareTo(arcomTNTChannelOrdering[b.id]!);
     })
     ..addAll(
       unorderedChannels.where(
-        (channel) => !acromTNTChannelOrdering.containsKey(channel.id),
+        (channel) => !arcomTNTChannelOrdering.containsKey(channel.id),
       ),
     );
   return Future.value(orderedChannels);

@@ -324,9 +324,9 @@ class _ChannelListState extends ConsumerState<ChannelList>
                         child: Row(
                           spacing: 4.0,
                           children: [
-                            acromTNTChannelOrdering[channel.id] != null
+                            arcomTNTChannelOrdering[channel.id] != null
                                 ? Text(
-                                    '${acromTNTChannelOrdering[channel.id]!}.',
+                                    '${arcomTNTChannelOrdering[channel.id]!}.',
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
