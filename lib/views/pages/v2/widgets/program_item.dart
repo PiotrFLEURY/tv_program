@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tv_program/models/channel.dart';
 import 'package:tv_program/models/program.dart';
+import 'package:tv_program/providers/channels_provider.dart';
 import 'package:tv_program/views/widgets/safe_image.dart';
 
 class ProgramItem extends ConsumerWidget {
@@ -34,35 +35,63 @@ class ProgramItem extends ConsumerWidget {
               )
             : null,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment:
-            big ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+      child: Stack(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white.withAlpha(120),
-            ),
-            child: SafeImage(
-              url: big ? channel.icon : program.icon ?? '',
-              size: 96,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment:
+                big ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withAlpha(120),
+                ),
+                child: SafeImage(
+                  url: big ? channel.icon : program.icon ?? '',
+                  size: 96,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Flexible(
+                child: Text(
+                  '${program.startTime} - ${program.title}',
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: true,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: big ? 24 : 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 16),
-          Flexible(
-            child: Text(
-              '${program.startTime} - ${program.title}',
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              softWrap: true,
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: big ? 24 : 16,
-                fontWeight: FontWeight.w600,
+          if (big &&
+              arcomTNTChannelOrdering[channel.id] !=
+                  null) // Ensure channel is in the ordering map
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: Colors.blueGrey,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  'Canal ${arcomTNTChannelOrdering[channel.id]!}',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
             ),
-          ),
         ],
       ),
     );

@@ -83,7 +83,11 @@ class _HomeListState extends ConsumerState<HomeList> {
             ),
           );
         },
-        loading: () => const SizedBox(),
+        loading: () => const SizedBox(
+          // Need to set fixed height to avoid scrolling issues
+          // when scrolling from bottom to top
+          height: 96,
+        ),
         error: (error, stack) => const SizedBox.shrink(),
       ),
     );
