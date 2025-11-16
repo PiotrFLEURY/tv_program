@@ -6,21 +6,55 @@ part of 'selected_program.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(SelectedProgram)
+const selectedProgramProvider = SelectedProgramProvider._();
+
+final class SelectedProgramProvider
+    extends $NotifierProvider<SelectedProgram, SelectedProgramEnum> {
+  const SelectedProgramProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'selectedProgramProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$selectedProgramHash();
+
+  @$internal
+  @override
+  SelectedProgram create() => SelectedProgram();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SelectedProgramEnum value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SelectedProgramEnum>(value),
+    );
+  }
+}
+
 String _$selectedProgramHash() => r'934449da222dcea49b11208a3f7482b3395675e2';
 
-/// See also [SelectedProgram].
-@ProviderFor(SelectedProgram)
-final selectedProgramProvider =
-    AutoDisposeNotifierProvider<SelectedProgram, SelectedProgramEnum>.internal(
-  SelectedProgram.new,
-  name: r'selectedProgramProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$selectedProgramHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$SelectedProgram = AutoDisposeNotifier<SelectedProgramEnum>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$SelectedProgram extends $Notifier<SelectedProgramEnum> {
+  SelectedProgramEnum build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<SelectedProgramEnum, SelectedProgramEnum>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<SelectedProgramEnum, SelectedProgramEnum>,
+        SelectedProgramEnum,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}

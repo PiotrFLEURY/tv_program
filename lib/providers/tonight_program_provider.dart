@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tv_program/models/program.dart';
 import 'package:tv_program/providers/service_provider.dart';

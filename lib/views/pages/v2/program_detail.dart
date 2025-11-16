@@ -24,8 +24,7 @@ class ProgramDetail extends StatelessWidget {
       ),
       backgroundColor: TvProgTheme.backgroundColor,
       extendBodyBehindAppBar: true,
-      body: Column(
-        spacing: 16,
+      body: ListView(
         children: [
           Stack(
             alignment: Alignment.bottomCenter,

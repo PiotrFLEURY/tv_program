@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 2.3.0+20
+version: 2.4.0+21
 
 environment:
   sdk: '>=3.4.4 <4.0.0'
@@ -37,11 +37,11 @@ dependencies:
   cupertino_icons: ^1.0.6
   http: ^1.4.0
   intl: ^0.20.2
-  flutter_riverpod: ^2.5.1
-  riverpod_annotation: ^2.3.5
+  flutter_riverpod: ^3.0.3
+  riverpod_annotation: ^3.0.3
   shared_preferences: ^2.5.3
   flutter_svg: ^2.2.0
-  package_info_plus: ^8.3.0
+  package_info_plus: ^9.0.0
   url_launcher: ^6.3.2
 
 dev_dependencies:
@@ -55,10 +55,10 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
   test: ^1.25.2
-  riverpod_generator: ^2.4.0
+  riverpod_generator: ^3.0.3
   build_runner: ^2.4.11
-  custom_lint: ^0.7.5
-  riverpod_lint: ^2.3.10
+  custom_lint: ^0.8.0
+  riverpod_lint: ^3.0.3
   flutter_launcher_icons: ^0.14.4
   mockito: ^5.4.6
   pickled_cucumber: ^1.2.0

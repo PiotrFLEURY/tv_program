@@ -6,22 +6,48 @@ part of 'random_tonight_program_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$randomTonightProgramHash() =>
-    r'5f187a16e379af0cad038c9b1946e45e90b87e7c';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [RandomTonightProgram].
 @ProviderFor(RandomTonightProgram)
-final randomTonightProgramProvider =
-    AutoDisposeAsyncNotifierProvider<RandomTonightProgram, Program?>.internal(
-  RandomTonightProgram.new,
-  name: r'randomTonightProgramProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$randomTonightProgramHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const randomTonightProgramProvider = RandomTonightProgramProvider._();
 
-typedef _$RandomTonightProgram = AutoDisposeAsyncNotifier<Program?>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class RandomTonightProgramProvider
+    extends $AsyncNotifierProvider<RandomTonightProgram, Program?> {
+  const RandomTonightProgramProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'randomTonightProgramProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$randomTonightProgramHash();
+
+  @$internal
+  @override
+  RandomTonightProgram create() => RandomTonightProgram();
+}
+
+String _$randomTonightProgramHash() =>
+    r'1363dfeae7baa2e65fdff88e2eea54f3d2b67b83';
+
+abstract class _$RandomTonightProgram extends $AsyncNotifier<Program?> {
+  FutureOr<Program?> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<AsyncValue<Program?>, Program?>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<AsyncValue<Program?>, Program?>,
+        AsyncValue<Program?>,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}

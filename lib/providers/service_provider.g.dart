@@ -6,21 +6,46 @@ part of 'service_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$tvServiceHash() => r'6d5ba0f1da0c19f76f3d1d6e6d1c5d79785080dc';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [tvService].
 @ProviderFor(tvService)
-final tvServiceProvider = AutoDisposeProvider<TvService>.internal(
-  tvService,
-  name: r'tvServiceProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$tvServiceHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const tvServiceProvider = TvServiceProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef TvServiceRef = AutoDisposeProviderRef<TvService>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class TvServiceProvider
+    extends $FunctionalProvider<TvService, TvService, TvService>
+    with $Provider<TvService> {
+  const TvServiceProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'tvServiceProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$tvServiceHash();
+
+  @$internal
+  @override
+  $ProviderElement<TvService> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  TvService create(Ref ref) {
+    return tvService(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(TvService value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<TvService>(value),
+    );
+  }
+}
+
+String _$tvServiceHash() => r'6d5ba0f1da0c19f76f3d1d6e6d1c5d79785080dc';

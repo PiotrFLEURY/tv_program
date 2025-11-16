@@ -26,6 +26,15 @@
                 "reveal": "always",
                 "panel": "shared"
             }
+        },
+        {
+            "label": "Run Flutter integration tests",
+            "type": "shell",
+            "command": "flutter test integration_test/app_test.dart",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }
