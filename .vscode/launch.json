@@ -30,6 +30,16 @@
             "flutterMode": "profile"
         },
         {
+            "name": "WidgetBook",
+            "request": "launch",
+            "type": "dart",
+            "program": "widgetbook/lib/main.dart",
+            "args": [
+                "-d",
+                "chrome"
+            ]
+        },
+        {
             "name": "tv_program (release mode)",
             "request": "launch",
             "type": "dart",
