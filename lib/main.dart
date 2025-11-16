@@ -14,6 +14,8 @@ void main() async {
   initializeDateFormatting('fr_FR', null).then((_) {
     runApp(
       ProviderScope(
+        // Never retry any provider
+        retry: (retryCount, error) => null,
         child: TvProgram(
           packageInfo: packageInfo,
           homePage: homePage,
