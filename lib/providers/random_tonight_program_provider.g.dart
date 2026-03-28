@@ -10,11 +10,11 @@ part of 'random_tonight_program_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(RandomTonightProgram)
-const randomTonightProgramProvider = RandomTonightProgramProvider._();
+final randomTonightProgramProvider = RandomTonightProgramProvider._();
 
 final class RandomTonightProgramProvider
     extends $AsyncNotifierProvider<RandomTonightProgram, Program?> {
-  const RandomTonightProgramProvider._()
+  RandomTonightProgramProvider._()
       : super(
           from: null,
           argument: null,
@@ -41,13 +41,12 @@ abstract class _$RandomTonightProgram extends $AsyncNotifier<Program?> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AsyncValue<Program?>, Program?>;
     final element = ref.element as $ClassProviderElement<
         AnyNotifier<AsyncValue<Program?>, Program?>,
         AsyncValue<Program?>,
         Object?,
         Object?>;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

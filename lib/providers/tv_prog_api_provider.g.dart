@@ -10,12 +10,12 @@ part of 'tv_prog_api_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(tvProgApi)
-const tvProgApiProvider = TvProgApiProvider._();
+final tvProgApiProvider = TvProgApiProvider._();
 
 final class TvProgApiProvider
     extends $FunctionalProvider<TvProgApi, TvProgApi, TvProgApi>
     with $Provider<TvProgApi> {
-  const TvProgApiProvider._()
+  TvProgApiProvider._()
       : super(
           from: null,
           argument: null,

@@ -47,7 +47,10 @@ class ChannelSearch extends ConsumerWidget {
                         ),
                         margin: const EdgeInsets.all(8.0),
                         child: Center(
-                          child: SafeImage(url: channel.icon),
+                          child: SafeImage(
+                            url: channel.icon,
+                            fallback: channel.name,
+                          ),
                         ),
                       ),
                     );

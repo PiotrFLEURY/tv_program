@@ -30,6 +30,7 @@ class ProgramPage extends StatelessWidget {
                     height: 250,
                     child: SafeImage(
                       url: program.icon,
+                      fallback: program.title,
                     ),
                   ),
                 ),

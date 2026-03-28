@@ -41,7 +41,11 @@ class ProgramList extends ConsumerWidget {
           Center(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: SafeImage(url: channel.icon ?? '', size: 48),
+              child: SafeImage(
+                url: channel.icon ?? '',
+                size: 48,
+                fallback: channel.name,
+              ),
             ),
           ),
         ],

@@ -10,11 +10,11 @@ part of 'selected_program.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(SelectedProgram)
-const selectedProgramProvider = SelectedProgramProvider._();
+final selectedProgramProvider = SelectedProgramProvider._();
 
 final class SelectedProgramProvider
     extends $NotifierProvider<SelectedProgram, SelectedProgramEnum> {
-  const SelectedProgramProvider._()
+  SelectedProgramProvider._()
       : super(
           from: null,
           argument: null,
@@ -48,13 +48,12 @@ abstract class _$SelectedProgram extends $Notifier<SelectedProgramEnum> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<SelectedProgramEnum, SelectedProgramEnum>;
     final element = ref.element as $ClassProviderElement<
         AnyNotifier<SelectedProgramEnum, SelectedProgramEnum>,
         SelectedProgramEnum,
         Object?,
         Object?>;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

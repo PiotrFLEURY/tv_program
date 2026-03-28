@@ -10,10 +10,10 @@ part of 'filter_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(Filter)
-const filterProvider = FilterProvider._();
+final filterProvider = FilterProvider._();
 
 final class FilterProvider extends $NotifierProvider<Filter, String> {
-  const FilterProvider._()
+  FilterProvider._()
       : super(
           from: null,
           argument: null,
@@ -47,10 +47,9 @@ abstract class _$Filter extends $Notifier<String> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<String, String>;
     final element = ref.element as $ClassProviderElement<
         AnyNotifier<String, String>, String, Object?, Object?>;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
