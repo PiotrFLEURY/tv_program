@@ -10,12 +10,12 @@ part of 'tonight_program_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(tonightProgram)
-const tonightProgramProvider = TonightProgramFamily._();
+final tonightProgramProvider = TonightProgramFamily._();
 
 final class TonightProgramProvider extends $FunctionalProvider<
         AsyncValue<Program?>, Program?, FutureOr<Program?>>
     with $FutureModifier<Program?>, $FutureProvider<Program?> {
-  const TonightProgramProvider._(
+  TonightProgramProvider._(
       {required TonightProgramFamily super.from,
       required String super.argument})
       : super(
@@ -65,7 +65,7 @@ String _$tonightProgramHash() => r'a33f8e6b5653fb02671e33b59ac3fc2a7d852c35';
 
 final class TonightProgramFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<Program?>, String> {
-  const TonightProgramFamily._()
+  TonightProgramFamily._()
       : super(
           retry: null,
           name: r'tonightProgramProvider',

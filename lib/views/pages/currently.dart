@@ -339,6 +339,7 @@ class _ChannelListState extends ConsumerState<ChannelList>
                               tag: channel.icon!,
                               child: SafeImage(
                                 url: channel.icon,
+                                fallback: channel.name,
                                 size: 50,
                               ),
                             ),
@@ -381,6 +382,7 @@ class _ChannelListState extends ConsumerState<ChannelList>
                           child: ListTile(
                             leading: SafeImage(
                               url: program.icon,
+                              fallback: program.title,
                               size: 100,
                             ),
                             title: Text(program.header),

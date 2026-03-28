@@ -10,12 +10,12 @@ part of 'service_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(tvService)
-const tvServiceProvider = TvServiceProvider._();
+final tvServiceProvider = TvServiceProvider._();
 
 final class TvServiceProvider
     extends $FunctionalProvider<TvService, TvService, TvService>
     with $Provider<TvService> {
-  const TvServiceProvider._()
+  TvServiceProvider._()
       : super(
           from: null,
           argument: null,

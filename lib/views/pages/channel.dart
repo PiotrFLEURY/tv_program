@@ -46,6 +46,7 @@ class ChannelPage extends ConsumerWidget {
                 tag: channel.icon!,
                 child: SafeImage(
                   url: channel.icon,
+                  fallback: channel.name,
                   size: 200,
                 ),
               ),
@@ -86,6 +87,7 @@ class ChannelPage extends ConsumerWidget {
                     tag: '${program.startTime}${program.icon}',
                     child: SafeImage(
                       url: program.icon,
+                      fallback: program.title,
                       size: 100,
                     ),
                   ),

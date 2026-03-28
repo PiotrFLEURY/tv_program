@@ -10,12 +10,12 @@ part of 'current_program_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(currentProgram)
-const currentProgramProvider = CurrentProgramFamily._();
+final currentProgramProvider = CurrentProgramFamily._();
 
 final class CurrentProgramProvider
     extends $FunctionalProvider<AsyncValue<Program>, Program, FutureOr<Program>>
     with $FutureModifier<Program>, $FutureProvider<Program> {
-  const CurrentProgramProvider._(
+  CurrentProgramProvider._(
       {required CurrentProgramFamily super.from,
       required String super.argument})
       : super(
@@ -65,7 +65,7 @@ String _$currentProgramHash() => r'f7edefa6554958ee189355fbc937f21cb9ea0d01';
 
 final class CurrentProgramFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<Program>, String> {
-  const CurrentProgramFamily._()
+  CurrentProgramFamily._()
       : super(
           retry: null,
           name: r'currentProgramProvider',

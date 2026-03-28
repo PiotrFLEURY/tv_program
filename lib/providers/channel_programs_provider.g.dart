@@ -10,12 +10,12 @@ part of 'channel_programs_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(channelPrograms)
-const channelProgramsProvider = ChannelProgramsFamily._();
+final channelProgramsProvider = ChannelProgramsFamily._();
 
 final class ChannelProgramsProvider extends $FunctionalProvider<
         AsyncValue<List<Program>>, List<Program>, FutureOr<List<Program>>>
     with $FutureModifier<List<Program>>, $FutureProvider<List<Program>> {
-  const ChannelProgramsProvider._(
+  ChannelProgramsProvider._(
       {required ChannelProgramsFamily super.from,
       required String super.argument})
       : super(
@@ -66,7 +66,7 @@ String _$channelProgramsHash() => r'e72a8a61a1b3f43b48575ff58ba8be9bd5ff05eb';
 
 final class ChannelProgramsFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<Program>>, String> {
-  const ChannelProgramsFamily._()
+  ChannelProgramsFamily._()
       : super(
           retry: null,
           name: r'channelProgramsProvider',

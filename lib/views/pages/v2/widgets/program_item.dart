@@ -48,6 +48,7 @@ class ProgramItem extends ConsumerWidget {
                 ),
                 child: SafeImage(
                   url: big ? channel.icon : program.icon ?? '',
+                  fallback: big ? channel.name : program.title,
                   size: 96,
                 ),
               ),

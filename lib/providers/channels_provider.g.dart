@@ -10,12 +10,12 @@ part of 'channels_provider.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(channels)
-const channelsProvider = ChannelsProvider._();
+final channelsProvider = ChannelsProvider._();
 
 final class ChannelsProvider extends $FunctionalProvider<
         AsyncValue<List<Channel>>, List<Channel>, FutureOr<List<Channel>>>
     with $FutureModifier<List<Channel>>, $FutureProvider<List<Channel>> {
-  const ChannelsProvider._()
+  ChannelsProvider._()
       : super(
           from: null,
           argument: null,
