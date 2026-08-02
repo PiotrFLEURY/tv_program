@@ -58,7 +58,8 @@ class HomePage extends ConsumerWidget {
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding:
+                  const EdgeInsets.only(bottom: 64.0, left: 16.0, right: 16.0),
               child: SelectedProgramSelector(),
             ),
           ),
