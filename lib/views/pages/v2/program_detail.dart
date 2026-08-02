@@ -13,7 +13,7 @@ class ProgramDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(bottom: 64.0, left: 16.0, right: 16.0),
         child: ElevatedButton.icon(
           onPressed: () {
             Navigator.pop(context);
